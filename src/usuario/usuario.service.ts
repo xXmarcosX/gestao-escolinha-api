@@ -60,4 +60,8 @@ export class UsuarioService {
 
     return exists
   }
+
+  async save(user: Usuario) {
+    return this.usuarioRepository.save(user)
+  }
 }

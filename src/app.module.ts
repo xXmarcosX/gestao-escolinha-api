@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './config/data-source';
 import { UsuarioModule } from './usuario/usuario.module';
 import { ResponsavelModule } from './responsavel/responsavel.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ResponsavelModule } from './responsavel/responsavel.module';
 
     // módulos
     AlergiaModule,
+    AuthModule,
     UsuarioModule,
     ResponsavelModule,
 

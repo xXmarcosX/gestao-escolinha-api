@@ -1,17 +1,32 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, BadRequestException } from '@nestjs/common';
 import { ResponsavelService } from './responsavel.service';
 import { CreateResponsavelDto } from './dto/create-responsavel.dto';
 import { UpdateResponsavelDto } from './dto/update-responsavel.dto';
+import { UsuarioService } from 'src/usuario/usuario.service';
+import { HashingService } from 'src/auth/hashing/hashing.service';
 
 @Controller('responsavel')
 export class ResponsavelController {
-  constructor(private readonly responsavelService: ResponsavelService) { }
+  constructor(
+    private readonly responsavelService: ResponsavelService,
+
+    private readonly usuarioService: UsuarioService,
+
+    private readonly hashingService: HashingService
+  ) { }
 
   @Post()
-  create(@Body() createResponsavelDto: CreateResponsavelDto) {
-    return this.responsavelService.create(createResponsavelDto);
+  async create(@Body() createResponsavelDto: CreateResponsavelDto) {
+    if (!createResponsavelDto || !createResponsavelDto.usuario?.email) throw new BadRequestException('Dados não enviados')
+
+    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario.email)
+
+    const hashedPassword = await this.hashingService.hash(createResponsavelDto.usuario.senha || '')
+    createResponsavelDto.usuario.senha = hashedPassword
+
+    return await this.responsavelService.create(createResponsavelDto)
   }
-  
+
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
