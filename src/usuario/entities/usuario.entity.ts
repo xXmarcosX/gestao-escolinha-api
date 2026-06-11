@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { UsuarioPerfil } from "./usuario-perfil.enum";
+import { Exclude } from "class-transformer";
 
 @Entity()
 export class Usuario {
@@ -17,6 +18,7 @@ export class Usuario {
     length: 255,
     name: 'usu_senha_hash'
   })
+  @Exclude()
   senha?: string;
 
   @Column({

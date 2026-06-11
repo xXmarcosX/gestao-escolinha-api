@@ -59,10 +59,6 @@ export class ResponsavelService {
       await this.failIfCpfExists(updateResponsavelDto.cpf)
     }
 
-    if (updateResponsavelDto.usuario?.email && updateResponsavelDto.usuario.email !== responsavel.usuario?.email) {
-      await this.usuarioService.failIfEmailExists(updateResponsavelDto.usuario.email)
-    }
-
     this.responsavelRepository.merge(responsavel, updateResponsavelDto)
     return this.responsavelRepository.save(responsavel)
   }
