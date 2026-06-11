@@ -7,6 +7,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { ResponsavelModule } from './responsavel/responsavel.module';
 import { AuthModule } from './auth/auth.module';
 import { TipoEventoMedicoModule } from './tipo-evento-medico/tipo-evento-medico.module';
+import { TipoPagamentoModule } from './tipo-pagamento/tipo-pagamento.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { TipoEventoMedicoModule } from './tipo-evento-medico/tipo-evento-medico.
     UsuarioModule,
     ResponsavelModule,
     TipoEventoMedicoModule,
+    TipoPagamentoModule,
 
   ],
   controllers: [],
