@@ -3,20 +3,24 @@ import { LoginDto } from "./dto/login.dto";
 import { UsuarioService } from "src/usuario/usuario.service";
 import { HashingService } from "./hashing/hashing.service";
 import { JwtService } from "@nestjs/jwt";
+import { ResponsavelService } from "src/responsavel/responsavel.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usuarioService: UsuarioService,
+    private readonly responsavelService: ResponsavelService,
     private readonly hashingService: HashingService,
     private readonly jwtService: JwtService
   ) { }
 
   async login(body: LoginDto) {
     const error = new UnauthorizedException('Usuário ou senha inválidos')
+    let primeiroNomeUsuario = ''
+    let sobrenomeUsuario = ''
 
     if (!body.email) throw new BadRequestException('Email está vazio')
-    if (!body.senha) throw new BadRequestException('Email está vazio')
+    if (!body.senha) throw new BadRequestException('Senha está vazia')
 
     const user = await this.usuarioService.findOneByEmail(body.email)
 
@@ -26,13 +30,24 @@ export class AuthService {
 
     if (!isPasswordValid) throw error
 
+    switch (user.tipoPerfil) {
+      case 'RESPONSAVEL':
+        const responsavel = await this.responsavelService.findOne(user.id || -1)
+        primeiroNomeUsuario = responsavel.primeiroNome || ''
+        sobrenomeUsuario = responsavel.sobrenome || ''
+        break
+      default:
+        // Não deve nem ser possível chegar aqui
+        throw new BadRequestException('Tipo de usuário inválido.')
+    }
+
     const accessToken = await this.jwtService.signAsync({
       sub: user.id,
       email: user.email,
+      primeiroNomeUsuario,
+      sobrenomeUsuario,
       role: user.tipoPerfil
     })
-
-    await this.usuarioService.save(user)
 
     return { accessToken }
   }

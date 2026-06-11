@@ -1,4 +1,4 @@
-import { InternalServerErrorException, Module } from "@nestjs/common";
+import { forwardRef, InternalServerErrorException, Module } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { HashingService } from "./hashing/hashing.service";
@@ -6,6 +6,7 @@ import { BcryptHashingService } from "./hashing/bcrypt-hashing.service";
 import { JwtStrategy } from "./jwt.strategy";
 import { UsuarioModule } from "src/usuario/usuario.module";
 import { JwtModule } from "@nestjs/jwt";
+import { ResponsavelModule } from "src/responsavel/responsavel.module";
 
 @Module({
   providers: [
@@ -20,6 +21,7 @@ import { JwtModule } from "@nestjs/jwt";
   exports: [HashingService],
   imports: [
     UsuarioModule,
+    forwardRef(() => ResponsavelModule),
     
     JwtModule.registerAsync({
         useFactory: () => {

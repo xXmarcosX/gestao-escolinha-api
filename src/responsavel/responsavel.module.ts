@@ -16,6 +16,7 @@ import { AuthModule } from 'src/auth/auth.module';
     UsuarioModule,
     TelefoneResponsavelModule,
     AuthModule
-  ]
+  ],
+  exports: [ResponsavelService]
 })
 export class ResponsavelModule {}
