@@ -1,0 +1,19 @@
+import { Module } from '@nestjs/common';
+import { ResponsavelService } from './responsavel.service';
+import { ResponsavelController } from './responsavel.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Responsavel } from './entities/responsavel.entity';
+import { UsuarioModule } from 'src/usuario/usuario.module';
+import { TelefoneResponsavelModule } from './telefone-responsavel/telefone-responsavel.module';
+import { TelefoneResponsavel } from './telefone-responsavel/entities/telefone-responsavel.entity';
+
+@Module({
+  controllers: [ResponsavelController],
+  providers: [ResponsavelService],
+  imports: [
+    TypeOrmModule.forFeature([Responsavel]),
+    UsuarioModule,
+    TelefoneResponsavelModule
+  ]
+})
+export class ResponsavelModule {}
