@@ -6,6 +6,7 @@ import { dataSourceOptions } from './config/data-source';
 import { UsuarioModule } from './usuario/usuario.module';
 import { ResponsavelModule } from './responsavel/responsavel.module';
 import { AuthModule } from './auth/auth.module';
+import { TipoEventoMedicoModule } from './tipo-evento-medico/tipo-evento-medico.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     UsuarioModule,
     ResponsavelModule,
+    TipoEventoMedicoModule,
 
   ],
   controllers: [],
