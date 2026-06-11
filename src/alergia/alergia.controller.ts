@@ -5,7 +5,7 @@ import { UpdateAlergiaDto } from './dto/update-alergia.dto';
 
 @Controller('alergia')
 export class AlergiaController {
-  constructor(private readonly alergiaService: AlergiaService) {}
+  constructor(private readonly alergiaService: AlergiaService) { }
 
   @Post()
   create(@Body() createAlergiaDto: CreateAlergiaDto) {

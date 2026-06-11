@@ -10,7 +10,7 @@ export class AlergiaService {
   constructor(
     @InjectRepository(Alergia)
     private readonly alergiaRepository: Repository<Alergia>
-  ) {}
+  ) { }
 
   async create(createAlergiaDto: CreateAlergiaDto) {
     const novaAlergia = this.alergiaRepository.create(createAlergiaDto)
@@ -40,7 +40,7 @@ export class AlergiaService {
 
     if (!alergia) throw new NotFoundException(`Alergia com ${id} id não cadastrada`)
 
-      return this.alergiaRepository.save(alergia)
+    return this.alergiaRepository.save(alergia)
   }
 
   async remove(id: number) {

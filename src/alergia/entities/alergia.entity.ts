@@ -2,15 +2,15 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 
 @Entity()
 export class Alergia {
-    @PrimaryGeneratedColumn({name: 'ale_id'})
-    id?: number;
+  @PrimaryGeneratedColumn({ name: 'ale_id' })
+  id?: number;
 
-    @Column({name: 'ale_tipo_alergia'})
-    tipoAlergia?: string;
+  @Column({ name: 'ale_tipo_alergia' })
+  tipoAlergia?: string;
 
-    @CreateDateColumn({name: 'criado_em', type: 'timestamp'})
-    criadoEm?: Date
+  @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
+  criadoEm?: Date
 
-    @UpdateDateColumn({name: 'atualizado_em', type: 'timestamp'})
-    atualizadoEm?: Date
+  @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
+  atualizadoEm?: Date
 }
