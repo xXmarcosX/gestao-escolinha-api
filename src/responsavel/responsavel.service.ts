@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Responsavel } from './entities/responsavel.entity';
 import { Repository } from 'typeorm';
 import { UsuarioService } from 'src/usuario/usuario.service';
+import { HashingService } from 'src/auth/hashing/hashing.service';
 
 @Injectable()
 export class ResponsavelService {
@@ -12,12 +13,21 @@ export class ResponsavelService {
     @InjectRepository(Responsavel)
     private readonly responsavelRepository: Repository<Responsavel>,
 
-    private readonly usuarioService: UsuarioService
+    private readonly usuarioService: UsuarioService,
+
+    private readonly hashingService: HashingService
   ) { }
 
   async create(createResponsavelDto: CreateResponsavelDto) {
     await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario?.email || '');
     await this.failIfCpfExists(createResponsavelDto.cpf || '');
+
+    if (!createResponsavelDto || !createResponsavelDto.usuario?.email) throw new BadRequestException('Dados não enviados')
+
+    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario.email)
+
+    const hashedPassword = await this.hashingService.hash(createResponsavelDto.usuario.senha || '')
+    createResponsavelDto.usuario.senha = hashedPassword
 
     const usuarioCriado = createResponsavelDto.usuario && await this.usuarioService.create(createResponsavelDto.usuario);
 

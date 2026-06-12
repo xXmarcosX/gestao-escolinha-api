@@ -9,21 +9,10 @@ import { HashingService } from 'src/auth/hashing/hashing.service';
 export class ResponsavelController {
   constructor(
     private readonly responsavelService: ResponsavelService,
-
-    private readonly usuarioService: UsuarioService,
-
-    private readonly hashingService: HashingService
   ) { }
 
   @Post()
   async create(@Body() createResponsavelDto: CreateResponsavelDto) {
-    if (!createResponsavelDto || !createResponsavelDto.usuario?.email) throw new BadRequestException('Dados não enviados')
-
-    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario.email)
-
-    const hashedPassword = await this.hashingService.hash(createResponsavelDto.usuario.senha || '')
-    createResponsavelDto.usuario.senha = hashedPassword
-
     return await this.responsavelService.create(createResponsavelDto)
   }
 
