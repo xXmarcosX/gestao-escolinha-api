@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AlergiaModule } from './alergia/alergia.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './config/data-source';
 import { UsuarioModule } from './usuario/usuario.module';

@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, BadRequestException, UseGuards } from '@nestjs/common';
 import { ResponsavelService } from './responsavel.service';
 import { CreateResponsavelDto } from './dto/create-responsavel.dto';
 import { UpdateResponsavelDto } from './dto/update-responsavel.dto';
 import { UsuarioService } from 'src/usuario/usuario.service';
 import { HashingService } from 'src/auth/hashing/hashing.service';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { SelfOrAdminGuard } from 'src/guards/self-or-admin.guard';
 
 @Controller('responsavel')
 export class ResponsavelController {
@@ -28,8 +30,14 @@ export class ResponsavelController {
     return this.responsavelService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Patch('v1/:id')
   update(@Param('id') id: string, @Body() updateResponsavelDto: UpdateResponsavelDto) {
+    return this.responsavelService.update(+id, updateResponsavelDto);
+  }
+
+  @UseGuards(JwtAuthGuard, SelfOrAdminGuard)
+  @Patch('v2/me/:id')
+  updateAuth(@Param('id') id: string, @Body() updateResponsavelDto: UpdateResponsavelDto) {
     return this.responsavelService.update(+id, updateResponsavelDto);
   }
 

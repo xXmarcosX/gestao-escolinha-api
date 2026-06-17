@@ -1,8 +1,10 @@
-import { UnauthorizedException } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
+import { JwtPayload } from "src/models/jwt-payload";
 import { UsuarioService } from "src/usuario/usuario.service";
 
+@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly usuarioService: UsuarioService,
@@ -20,11 +22,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: { sub: number }) {
-    const user = await this.usuarioService.findOne(payload.sub);
+  async validate(payload: JwtPayload) {
+    const user = await this.usuarioService.findOneByEmail(payload.email);
 
     if (!user) {
-       throw new UnauthorizedException('Você precisa fazer login');
+       throw new UnauthorizedException('Você precisa fazer login.');
     }
 
     return user;
