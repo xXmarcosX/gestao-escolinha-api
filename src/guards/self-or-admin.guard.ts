@@ -13,7 +13,7 @@ export class SelfOrAdminGuard implements CanActivate {
     const user = request.user;
     const resourceId = request.params.id; 
 
-    if (user.role === 'ADMIN') {
+    if (user.tipoPefil === 'ADMIN' || user.tipoPerfil === 'FUNCIONARIO') {
       return true;
     }
 
