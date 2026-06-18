@@ -5,7 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Responsavel } from './entities/responsavel.entity';
 import { UsuarioModule } from 'src/usuario/usuario.module';
 import { TelefoneResponsavelModule } from './telefone-responsavel/telefone-responsavel.module';
-import { TelefoneResponsavel } from './telefone-responsavel/entities/telefone-responsavel.entity';
 import { AuthModule } from 'src/auth/auth.module';
 
 @Module({

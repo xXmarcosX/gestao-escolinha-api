@@ -96,4 +96,17 @@ export class ResponsavelService {
 
     return exists
   }
+
+  async findByUserId(id: number) {
+    const responsavel = await this.responsavelRepository.findOne({
+      where: {
+        usuario: {id}
+      },
+      relations: ['usuario']
+    })
+
+    if (!responsavel) throw new NotFoundException('Usuário não encontrado,')
+
+    return responsavel
+  }
 }

@@ -7,6 +7,7 @@ import { JwtStrategy } from "./jwt.strategy";
 import { UsuarioModule } from "src/usuario/usuario.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ResponsavelModule } from "src/responsavel/responsavel.module";
+import { FuncionarioModule } from "src/funcionario/funcionario.module";
 
 @Module({
   providers: [
@@ -21,6 +22,8 @@ import { ResponsavelModule } from "src/responsavel/responsavel.module";
   exports: [HashingService],
   imports: [
     UsuarioModule,
+    
+    forwardRef(() => FuncionarioModule),
     forwardRef(() => ResponsavelModule),
     
     JwtModule.registerAsync({
