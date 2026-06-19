@@ -20,6 +20,7 @@ export class AuthService {
     const error = new UnauthorizedException('Usuário ou senha inválidos')
     let primeiroNomeUsuario = ''
     let sobrenomeUsuario = ''
+    let id = 0
 
     if (!body.email) throw new BadRequestException('Email está vazio')
     if (!body.senha) throw new BadRequestException('Senha está vazia')
@@ -37,12 +38,14 @@ export class AuthService {
         const responsavel = await this.responsavelService.findByUserId(user.id || -1)
         primeiroNomeUsuario = responsavel.primeiroNome || ''
         sobrenomeUsuario = responsavel.sobrenome || ''
+        id = responsavel.id || -1
         break
 
       case 'FUNCIONARIO':
         const funcionario = await this.funcionarioService.findByUserId(user.id || -1)
         primeiroNomeUsuario = funcionario.primeiroNome || ''
         sobrenomeUsuario = funcionario.sobrenome || ''
+        id = funcionario.id || 0
         break
 
       default:
@@ -51,7 +54,7 @@ export class AuthService {
     }
 
     const accessToken = await this.jwtService.signAsync({
-      sub: user.id,
+      sub: id,
       email: user.email,
       primeiroNomeUsuario,
       sobrenomeUsuario,
