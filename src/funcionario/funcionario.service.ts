@@ -18,12 +18,10 @@ export class FuncionarioService {
   ) { }
 
   async create(createFuncionarioDto: CreateFuncionarioDto) {
-    await this.usuarioService.failIfEmailExists(createFuncionarioDto.usuario?.email || '');
-    await this.failIfCpfExists(createFuncionarioDto.cpf || '');
-
     if (!createFuncionarioDto || !createFuncionarioDto.usuario?.email) throw new BadRequestException('Dados não enviados')
 
-    await this.usuarioService.failIfEmailExists(createFuncionarioDto.usuario.email)
+    await this.usuarioService.failIfEmailExists(createFuncionarioDto.usuario?.email || '');
+    await this.failIfCpfExists(createFuncionarioDto.cpf || '');
 
     const hashedPassword = await this.hashingService.hash(createFuncionarioDto.usuario.senha || '')
     createFuncionarioDto.usuario.senha = hashedPassword
@@ -39,7 +37,7 @@ export class FuncionarioService {
   }
 
   findAll() {
-    return this.funcionarioRepostory.find({relations: ['usuario']});
+    return this.funcionarioRepostory.find({ relations: ['usuario'] });
   }
 
   async findOne(id: number) {
@@ -97,7 +95,7 @@ export class FuncionarioService {
   async findByUserId(id: number) {
     const funcionario = await this.funcionarioRepostory.findOne({
       where: {
-        usuario: {id}
+        usuario: { id }
       },
       relations: ['usuario']
     })

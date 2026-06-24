@@ -5,22 +5,28 @@ import { HashingService } from "./hashing/hashing.service";
 import { JwtService } from "@nestjs/jwt";
 import { ResponsavelService } from "src/responsavel/responsavel.service";
 import { FuncionarioService } from "src/funcionario/funcionario.service";
+import { InstrutorService } from "src/instrutor/instrutor.service";
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usuarioService: UsuarioService,
+
     private readonly responsavelService: ResponsavelService,
     private readonly funcionarioService: FuncionarioService,
+    private readonly instrutorService: InstrutorService,
+
     private readonly hashingService: HashingService,
     private readonly jwtService: JwtService
   ) { }
 
   async login(body: LoginDto) {
     const error = new UnauthorizedException('Usuário ou senha inválidos')
-    let primeiroNomeUsuario = ''
-    let sobrenomeUsuario = ''
-    let id = 0
+    const jwtData = {
+      sub: 0,
+      primeiroNomeUsuario: '',
+      sobrenomeUsuario: ''
+    }
 
     if (!body.email) throw new BadRequestException('Email está vazio')
     if (!body.senha) throw new BadRequestException('Senha está vazia')
@@ -36,16 +42,23 @@ export class AuthService {
     switch (user.tipoPerfil) {
       case 'RESPONSAVEL':
         const responsavel = await this.responsavelService.findByUserId(user.id || -1)
-        primeiroNomeUsuario = responsavel.primeiroNome || ''
-        sobrenomeUsuario = responsavel.sobrenome || ''
-        id = responsavel.id || -1
+        jwtData.primeiroNomeUsuario = responsavel.primeiroNome || ''
+        jwtData.sobrenomeUsuario = responsavel.sobrenome || ''
+        jwtData.sub = responsavel.id || -1
         break
 
       case 'FUNCIONARIO':
         const funcionario = await this.funcionarioService.findByUserId(user.id || -1)
-        primeiroNomeUsuario = funcionario.primeiroNome || ''
-        sobrenomeUsuario = funcionario.sobrenome || ''
-        id = funcionario.id || 0
+        jwtData.primeiroNomeUsuario = funcionario.primeiroNome || ''
+        jwtData.sobrenomeUsuario = funcionario.sobrenome || ''
+        jwtData.sub = funcionario.id || -1
+        break
+
+      case 'INSTRUTOR':
+        const instrutor = await this.instrutorService.findByUserId(user.id || -1)
+        jwtData.primeiroNomeUsuario = instrutor.primeiroNome || ''
+        jwtData.sobrenomeUsuario = instrutor.sobrenome || ''
+        jwtData.sub = instrutor.id || -1
         break
 
       default:
@@ -54,10 +67,8 @@ export class AuthService {
     }
 
     const accessToken = await this.jwtService.signAsync({
-      sub: id,
+      ...jwtData,
       email: user.email,
-      primeiroNomeUsuario,
-      sobrenomeUsuario,
       role: user.tipoPerfil
     })
 

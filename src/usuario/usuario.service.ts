@@ -29,8 +29,6 @@ export class UsuarioService {
   }
 
   async update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    await this.failIfEmailExists(updateUsuarioDto.email || '')
-
     const usuario = await this.usuarioRepository.preload({
       id,
       ...updateUsuarioDto

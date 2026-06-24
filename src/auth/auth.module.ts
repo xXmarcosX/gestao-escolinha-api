@@ -8,6 +8,7 @@ import { UsuarioModule } from "src/usuario/usuario.module";
 import { JwtModule } from "@nestjs/jwt";
 import { ResponsavelModule } from "src/responsavel/responsavel.module";
 import { FuncionarioModule } from "src/funcionario/funcionario.module";
+import { InstrutorModule } from "src/instrutor/instrutor.module";
 
 @Module({
   providers: [
@@ -25,6 +26,7 @@ import { FuncionarioModule } from "src/funcionario/funcionario.module";
     
     forwardRef(() => FuncionarioModule),
     forwardRef(() => ResponsavelModule),
+    forwardRef(() => InstrutorModule),
     
     JwtModule.registerAsync({
         useFactory: () => {

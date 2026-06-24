@@ -1,9 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, BadRequestException, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards } from '@nestjs/common';
 import { ResponsavelService } from './responsavel.service';
 import { CreateResponsavelDto } from './dto/create-responsavel.dto';
 import { UpdateResponsavelDto } from './dto/update-responsavel.dto';
-import { UsuarioService } from 'src/usuario/usuario.service';
-import { HashingService } from 'src/auth/hashing/hashing.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { SelfOrAdminGuard } from 'src/guards/self-or-admin.guard';
 

@@ -10,6 +10,7 @@ import { TipoEventoMedicoModule } from './tipo-evento-medico/tipo-evento-medico.
 import { TipoPagamentoModule } from './tipo-pagamento/tipo-pagamento.module';
 import { LocalTreinoModule } from './local-treino/local-treino.module';
 import { FuncionarioModule } from './funcionario/funcionario.module';
+import { InstrutorModule } from './instrutor/instrutor.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { FuncionarioModule } from './funcionario/funcionario.module';
     TipoPagamentoModule,
     LocalTreinoModule,
     FuncionarioModule,
+    InstrutorModule,
 
   ],
   controllers: [],

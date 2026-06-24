@@ -19,12 +19,10 @@ export class ResponsavelService {
   ) { }
 
   async create(createResponsavelDto: CreateResponsavelDto) {
-    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario?.email || '');
-    await this.failIfCpfExists(createResponsavelDto.cpf || '');
-
     if (!createResponsavelDto || !createResponsavelDto.usuario?.email) throw new BadRequestException('Dados não enviados')
 
-    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario.email)
+    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario?.email || '');
+    await this.failIfCpfExists(createResponsavelDto.cpf || '');
 
     const hashedPassword = await this.hashingService.hash(createResponsavelDto.usuario.senha || '')
     createResponsavelDto.usuario.senha = hashedPassword
@@ -100,7 +98,7 @@ export class ResponsavelService {
   async findByUserId(id: number) {
     const responsavel = await this.responsavelRepository.findOne({
       where: {
-        usuario: {id}
+        usuario: { id }
       },
       relations: ['usuario']
     })
