@@ -41,24 +41,24 @@ export class AuthService {
 
     switch (user.tipoPerfil) {
       case 'RESPONSAVEL':
-        const responsavel = await this.responsavelService.findByUserId(user.id || -1)
-        jwtData.primeiroNomeUsuario = responsavel.primeiroNome || ''
-        jwtData.sobrenomeUsuario = responsavel.sobrenome || ''
-        jwtData.sub = responsavel.id || -1
+        const responsavel = await this.responsavelService.findByUserId(user.id)
+        jwtData.primeiroNomeUsuario = responsavel.primeiroNome 
+        jwtData.sobrenomeUsuario = responsavel.sobrenome 
+        jwtData.sub = responsavel.id
         break
 
       case 'FUNCIONARIO':
-        const funcionario = await this.funcionarioService.findByUserId(user.id || -1)
-        jwtData.primeiroNomeUsuario = funcionario.primeiroNome || ''
-        jwtData.sobrenomeUsuario = funcionario.sobrenome || ''
-        jwtData.sub = funcionario.id || -1
+        const funcionario = await this.funcionarioService.findByUserId(user.id)
+        jwtData.primeiroNomeUsuario = funcionario.primeiroNome 
+        jwtData.sobrenomeUsuario = funcionario.sobrenome 
+        jwtData.sub = funcionario.id 
         break
 
       case 'INSTRUTOR':
-        const instrutor = await this.instrutorService.findByUserId(user.id || -1)
-        jwtData.primeiroNomeUsuario = instrutor.primeiroNome || ''
-        jwtData.sobrenomeUsuario = instrutor.sobrenome || ''
-        jwtData.sub = instrutor.id || -1
+        const instrutor = await this.instrutorService.findByUserId(user.id)
+        jwtData.primeiroNomeUsuario = instrutor.primeiroNome 
+        jwtData.sobrenomeUsuario = instrutor.sobrenome 
+        jwtData.sub = instrutor.id 
         break
 
       default:

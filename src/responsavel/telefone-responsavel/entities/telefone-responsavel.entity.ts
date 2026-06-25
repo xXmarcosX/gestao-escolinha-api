@@ -4,18 +4,18 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 @Entity({name: 'telefone_responsavel'})
 export class TelefoneResponsavel {
   @PrimaryGeneratedColumn({name: 'tel_id'})
-  id?: number;
+  id: number;
 
   @Column({name: 'tel_numero', length: 25})
-  numero?: string;
+  numero: string;
 
   @ManyToOne(() => Responsavel, (resp) => resp.telefones, {nullable: false})
   @JoinColumn({name: 'responsavel_id'})
-  responsavel?: Responsavel;
+  responsavel: Responsavel;
   
   @CreateDateColumn({name: 'criado_em'})
-  criadoEm?: Date;
+  criadoEm: Date;
   
   @UpdateDateColumn({name: 'atualizado_em'})
-  atualizadoEm?: Date;
+  atualizadoEm: Date;
 }

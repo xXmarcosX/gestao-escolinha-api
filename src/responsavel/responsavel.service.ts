@@ -19,15 +19,15 @@ export class ResponsavelService {
   ) { }
 
   async create(createResponsavelDto: CreateResponsavelDto) {
-    if (!createResponsavelDto || !createResponsavelDto.usuario?.email) throw new BadRequestException('Dados não enviados')
+    if (!createResponsavelDto) throw new BadRequestException('Dados não enviados')
 
-    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario?.email || '');
-    await this.failIfCpfExists(createResponsavelDto.cpf || '');
+    await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario.email);
+    await this.failIfCpfExists(createResponsavelDto.cpf);
 
-    const hashedPassword = await this.hashingService.hash(createResponsavelDto.usuario.senha || '')
+    const hashedPassword = await this.hashingService.hash(createResponsavelDto.usuario.senha)
     createResponsavelDto.usuario.senha = hashedPassword
 
-    const usuarioCriado = createResponsavelDto.usuario && await this.usuarioService.create(createResponsavelDto.usuario);
+    const usuarioCriado = await this.usuarioService.create(createResponsavelDto.usuario);
 
     const novoResponsavel = this.responsavelRepository.create({
       ...createResponsavelDto,

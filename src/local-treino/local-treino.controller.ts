@@ -1,11 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseBoolPipe } from '@nestjs/common';
 import { LocalTreinoService } from './local-treino.service';
 import { CreateLocalTreinoDto } from './dto/create-local-treino.dto';
 import { UpdateLocalTreinoDto } from './dto/update-local-treino.dto';
+import { FiltroAtivoDto } from './dto/filtro-ativo-dto';
 
 @Controller('local-treino')
 export class LocalTreinoController {
-  constructor(private readonly localTreinoService: LocalTreinoService) {}
+  constructor(private readonly localTreinoService: LocalTreinoService) { }
 
   @Post()
   create(@Body() createLocalTreinoDto: CreateLocalTreinoDto) {
@@ -13,8 +14,10 @@ export class LocalTreinoController {
   }
 
   @Get()
-  findAll() {
-    return this.localTreinoService.findAll();
+  findAll(@Query() ativo: FiltroAtivoDto) {
+    const isAtivo = ativo.ativo === 'true';
+
+    return this.localTreinoService.findAll(isAtivo);
   }
 
   @Get(':id')

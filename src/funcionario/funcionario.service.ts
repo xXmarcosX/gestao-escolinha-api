@@ -18,12 +18,12 @@ export class FuncionarioService {
   ) { }
 
   async create(createFuncionarioDto: CreateFuncionarioDto) {
-    if (!createFuncionarioDto || !createFuncionarioDto.usuario?.email) throw new BadRequestException('Dados não enviados')
+    if (!createFuncionarioDto) throw new BadRequestException('Dados não enviados')
 
-    await this.usuarioService.failIfEmailExists(createFuncionarioDto.usuario?.email || '');
-    await this.failIfCpfExists(createFuncionarioDto.cpf || '');
+    await this.usuarioService.failIfEmailExists(createFuncionarioDto.usuario.email);
+    await this.failIfCpfExists(createFuncionarioDto.cpf);
 
-    const hashedPassword = await this.hashingService.hash(createFuncionarioDto.usuario.senha || '')
+    const hashedPassword = await this.hashingService.hash(createFuncionarioDto.usuario.senha)
     createFuncionarioDto.usuario.senha = hashedPassword
 
     const usuarioCriado = createFuncionarioDto.usuario && await this.usuarioService.create(createFuncionarioDto.usuario);

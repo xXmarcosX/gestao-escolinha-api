@@ -3,16 +3,14 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity({name:'tipo_pagamento'})
 export class TipoPagamento {
     @PrimaryGeneratedColumn({name:'tip_id'})
-    id?: number;
+    id: number;
 
     @Column({name:'tip_tipo_pagamento'})
-    tipoPagamento?: string;
+    tipoPagamento: string;
 
-    
     @CreateDateColumn({name:'criado_em'})
-    criadoEm?: Date;
+    criadoEm: Date;
 
-    
     @UpdateDateColumn({name:'atualizado_em'})
-    atualizadoEm?: Date;
+    atualizadoEm: Date;
 }

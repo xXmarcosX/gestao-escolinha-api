@@ -15,8 +15,9 @@ export class LocalTreinoService {
     return this.localTreinoRepository.save(createLocalTreinoDto);
   }
 
-  findAll() {
-    return this.localTreinoRepository.find();
+  findAll(ativo: boolean) {
+    if (ativo) return this.findActiveLocalTreino()
+    else return this.localTreinoRepository.find()
   }
 
   async findOne(id: number) {
@@ -42,5 +43,13 @@ export class LocalTreinoService {
     const localTreino = await this.findOne(id)
 
     return this.localTreinoRepository.delete(localTreino)
+  }
+
+  async findActiveLocalTreino() {
+    return this.localTreinoRepository.find({
+      where: {
+        isActive: true
+      }
+    })
   }
 }

@@ -3,14 +3,14 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity()
 export class Alergia {
   @PrimaryGeneratedColumn({ name: 'ale_id' })
-  id?: number;
+  id: number;
 
   @Column({ name: 'ale_tipo_alergia' })
-  tipoAlergia?: string;
+  tipoAlergia: string;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  criadoEm?: Date
+  criadoEm: Date
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  atualizadoEm?: Date
+  atualizadoEm: Date
 }

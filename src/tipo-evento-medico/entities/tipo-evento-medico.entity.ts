@@ -3,16 +3,14 @@ import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateCol
 @Entity({name:'tipo_evento_medico'})
 export class TipoEventoMedico {
     @PrimaryGeneratedColumn({name:'tip_id'})
-    id?: number;
+    id: number;
 
     @Column({name:'tip_evento'})
-    evento?: string;
+    evento: string;
 
-    
     @CreateDateColumn({name:'criado_em'})
-    criadoEm?: Date;
+    criadoEm: Date;
 
-    
     @UpdateDateColumn({name:'atualizado_em'})
-    atualizadoEm?: Date;
+    atualizadoEm: Date;
 }

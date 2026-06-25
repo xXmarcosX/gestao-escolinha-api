@@ -17,15 +17,15 @@ export class InstrutorService {
   ) { }
 
   async create(createInstrutorDto: CreateInstrutorDto) {
-    if (!createInstrutorDto || !createInstrutorDto.usuario?.email) throw new BadRequestException('Dados não enviados')
+    if (!createInstrutorDto) throw new BadRequestException('Dados não enviados')
 
-    await this.usuarioService.failIfEmailExists(createInstrutorDto.usuario?.email || '');
-    await this.failIfCpfExists(createInstrutorDto.cpf || '');
+    await this.usuarioService.failIfEmailExists(createInstrutorDto.usuario.email);
+    await this.failIfCpfExists(createInstrutorDto.cpf);
 
-    const hashedPassword = await this.hashingService.hash(createInstrutorDto.usuario.senha || '')
+    const hashedPassword = await this.hashingService.hash(createInstrutorDto.usuario.senha)
     createInstrutorDto.usuario.senha = hashedPassword
 
-    const usuarioCriado = createInstrutorDto.usuario && await this.usuarioService.create(createInstrutorDto.usuario);
+    const usuarioCriado = await this.usuarioService.create(createInstrutorDto.usuario);
 
     const novoInstrutor = this.instrutorRepository.create({
       ...createInstrutorDto,

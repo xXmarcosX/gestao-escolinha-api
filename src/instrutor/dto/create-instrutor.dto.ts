@@ -7,65 +7,65 @@ export class CreateInstrutorDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(95)
-  primeiroNome?: string;
+  primeiroNome: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(180)
-  sobrenome?: string;
+  sobrenome: string;
 
   @IsNotEmpty()
   @IsDate()
   @Type(() => Date)
-  dataNascimento?: Date;
+  dataNascimento: Date;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
-  cpf?: string;
+  cpf: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
-  cep?: string;
+  cep: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(150)
-  rua?: string;
+  rua: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(50)
-  numero?: string;
+  numero: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(90)
-  bairro?: string;
+  bairro: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(180)
-  cidade?: string;
+  cidade: string;
 
   @IsString()
   @IsNotEmpty()
   @MaxLength(10)
-  estado?: string;
+  estado: string;
 
   @IsString()
   @IsOptional()
   @MaxLength(255)
-  complemento?: string;
+  complemento: string;
 
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => CreateUsuarioDto)
-  usuario?: CreateUsuarioDto;
+  usuario: CreateUsuarioDto;
 
   @IsNotEmpty()
   @ValidateNested()
   @Type(() => CreateTelefoneInstrutorDto)
-  telefones?: CreateTelefoneInstrutorDto[]
+  telefones: CreateTelefoneInstrutorDto[]
 }

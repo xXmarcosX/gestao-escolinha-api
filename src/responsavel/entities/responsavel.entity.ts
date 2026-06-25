@@ -5,51 +5,51 @@ import { TelefoneResponsavel } from '../telefone-responsavel/entities/telefone-r
 @Entity()
 export class Responsavel {
   @PrimaryGeneratedColumn({ name: 'res_id' })
-  id?: number;
+  id: number;
 
   @Column({ name: 'res_primeiro_nome', length: 95 })
-  primeiroNome?: string;
+  primeiroNome: string;
 
   @Column({ name: 'res_sobrenome', length: 180 })
-  sobrenome?: string;
+  sobrenome: string;
 
   @Column({ name: 'res_data_nascimento'})
-  dataNascimento?: Date;
+  dataNascimento: Date;
 
   @Column({ name: 'res_cpf', length: 20, unique: true })
-  cpf?: string;
+  cpf: string;
 
   @Column({ name: 'res_cep', length: 20 })
-  cep?: string;
+  cep: string;
 
   @Column({ name: 'res_rua', length: 150 })
-  rua?: string;
+  rua: string;
 
   @Column({ name: 'res_numero', length: 50 })
-  numero?: string;
+  numero: string;
 
   @Column({ name: 'res_bairro', length: 90 })
-  bairro?: string;
+  bairro: string;
 
   @Column({ name: 'res_cidade', length: 180 })
-  cidade?: string;
+  cidade: string;
 
   @Column({ name: 'res_estado', length: 10 })
-  estado?: string;
+  estado: string;
 
   @Column({ name: 'res_complemento', length: 255, nullable: true })
-  complemento?: string;
+  complemento: string;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  criadoEm?: Date;
+  criadoEm: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  atualizadoEm?: Date;
+  atualizadoEm: Date;
 
   @OneToOne(() => Usuario, { cascade: true, onDelete: "CASCADE" })
   @JoinColumn({ name: "usuario_id" })
-  usuario?: Usuario;
+  usuario: Usuario;
 
   @OneToMany(() => TelefoneResponsavel, (telefone) => telefone.responsavel, {cascade: true, onDelete: 'CASCADE'})
-  telefones?: TelefoneResponsavel[];
+  telefones: TelefoneResponsavel[];
 }
