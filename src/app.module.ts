@@ -11,6 +11,8 @@ import { TipoPagamentoModule } from './tipo-pagamento/tipo-pagamento.module';
 import { LocalTreinoModule } from './local-treino/local-treino.module';
 import { FuncionarioModule } from './funcionario/funcionario.module';
 import { InstrutorModule } from './instrutor/instrutor.module';
+import { AlunoModule } from './aluno/aluno.module';
+import { TurmaModule } from './turma/turma.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { InstrutorModule } from './instrutor/instrutor.module';
     LocalTreinoModule,
     FuncionarioModule,
     InstrutorModule,
+    AlunoModule,
+    TurmaModule,
 
   ],
   controllers: [],

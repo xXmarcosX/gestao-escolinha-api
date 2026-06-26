@@ -21,11 +21,6 @@ export class CreateFuncionarioDto {
     @IsString()
     @IsNotEmpty()
     @MaxLength(20)
-    cpf: string;
-  
-    @IsString()
-    @IsNotEmpty()
-    @MaxLength(20)
     cep: string;
   
     @IsString()

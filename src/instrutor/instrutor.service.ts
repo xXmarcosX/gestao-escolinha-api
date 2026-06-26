@@ -20,7 +20,7 @@ export class InstrutorService {
     if (!createInstrutorDto) throw new BadRequestException('Dados não enviados')
 
     await this.usuarioService.failIfEmailExists(createInstrutorDto.usuario.email);
-    await this.failIfCpfExists(createInstrutorDto.cpf);
+    await this.usuarioService.failIfCpfExists(createInstrutorDto.usuario.cpf);
 
     const hashedPassword = await this.hashingService.hash(createInstrutorDto.usuario.senha)
     createInstrutorDto.usuario.senha = hashedPassword
@@ -61,8 +61,8 @@ export class InstrutorService {
 
     const instrutor = await this.findOne(id)
 
-    if (updateInstrutorDto.cpf && updateInstrutorDto.cpf !== instrutor.cpf) {
-      await this.failIfCpfExists(updateInstrutorDto.cpf)
+    if (updateInstrutorDto.usuario?.cpf && updateInstrutorDto.usuario.cpf !== instrutor.usuario.cpf) {
+      await this.usuarioService.failIfCpfExists(updateInstrutorDto.usuario.cpf)
     }
 
     this.instrutorRepository.merge(instrutor, updateInstrutorDto)
@@ -79,18 +79,10 @@ export class InstrutorService {
       throw new NotFoundException('Instrutor não encontrado');
     }
 
-    const usuarioId = instrutor.usuario?.id ? instrutor.usuario.id : -1;
+    const usuarioId = instrutor.usuario.id
 
-    await this.instrutorRepository.delete(id);
     await this.usuarioService.remove(usuarioId);
-  }
-
-  async failIfCpfExists(cpf: string) {
-    const exists = await this.instrutorRepository.existsBy({ cpf })
-
-    if (exists) throw new ConflictException('CPF já cadastrado.')
-
-    return exists
+    return await this.instrutorRepository.remove(instrutor);
   }
 
   async findByUserId(id: number) {
@@ -104,5 +96,18 @@ export class InstrutorService {
     if (!instrutor) throw new NotFoundException('Usuário não encontrado,')
 
     return instrutor
+  }
+
+  async findByUserCpf(cpf: string) {
+    const responsavel = await this.instrutorRepository.findOne({
+      where: {
+        usuario: { cpf }
+      },
+      relations: ['usuario']
+    })
+
+    if (!responsavel) throw new NotFoundException('Usuário não encontrado,')
+
+    return responsavel
   }
 }

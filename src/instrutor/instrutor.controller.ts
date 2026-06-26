@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { InstrutorService } from './instrutor.service';
 import { CreateInstrutorDto } from './dto/create-instrutor.dto';
 import { UpdateInstrutorDto } from './dto/update-instrutor.dto';
@@ -18,17 +18,17 @@ export class InstrutorController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.instrutorService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInstrutorDto: UpdateInstrutorDto) {
+  update(@Param('id', ParseIntPipe) id: string, @Body() updateInstrutorDto: UpdateInstrutorDto) {
     return this.instrutorService.update(+id, updateInstrutorDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.instrutorService.remove(+id);
   }
 }

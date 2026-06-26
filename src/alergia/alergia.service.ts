@@ -46,6 +46,6 @@ export class AlergiaService {
   async remove(id: number) {
     const alergia = await this.findOne(id)
 
-    return this.alergiaRepository.delete(alergia)
+    return this.alergiaRepository.remove(alergia)
   }
 }

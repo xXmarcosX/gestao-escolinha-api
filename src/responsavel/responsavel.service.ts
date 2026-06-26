@@ -22,7 +22,7 @@ export class ResponsavelService {
     if (!createResponsavelDto) throw new BadRequestException('Dados não enviados')
 
     await this.usuarioService.failIfEmailExists(createResponsavelDto.usuario.email);
-    await this.failIfCpfExists(createResponsavelDto.cpf);
+    await this.usuarioService.failIfCpfExists(createResponsavelDto.usuario.cpf);
 
     const hashedPassword = await this.hashingService.hash(createResponsavelDto.usuario.senha)
     createResponsavelDto.usuario.senha = hashedPassword
@@ -63,8 +63,8 @@ export class ResponsavelService {
 
     const responsavel = await this.findOne(id)
 
-    if (updateResponsavelDto.cpf && updateResponsavelDto.cpf !== responsavel.cpf) {
-      await this.failIfCpfExists(updateResponsavelDto.cpf)
+    if (updateResponsavelDto.usuario?.cpf && updateResponsavelDto.usuario.cpf !== responsavel.usuario.cpf) {
+      await this.usuarioService.failIfCpfExists(updateResponsavelDto.usuario.cpf)
     }
 
     this.responsavelRepository.merge(responsavel, updateResponsavelDto)
@@ -83,22 +83,27 @@ export class ResponsavelService {
 
     const usuarioId = responsavel.usuario?.id ? responsavel.usuario.id : -1;
 
-    await this.responsavelRepository.delete(id);
     await this.usuarioService.remove(usuarioId);
-  }
-
-  async failIfCpfExists(cpf: string) {
-    const exists = await this.responsavelRepository.existsBy({ cpf })
-
-    if (exists) throw new ConflictException('CPF já cadastrado.')
-
-    return exists
+    return await this.responsavelRepository.remove(responsavel);
   }
 
   async findByUserId(id: number) {
     const responsavel = await this.responsavelRepository.findOne({
       where: {
         usuario: { id }
+      },
+      relations: ['usuario']
+    })
+
+    if (!responsavel) throw new NotFoundException('Usuário não encontrado,')
+
+    return responsavel
+  }
+
+  async findByUserCpf(cpf: string) {
+    const responsavel = await this.responsavelRepository.findOne({
+      where: {
+        usuario: { cpf }
       },
       relations: ['usuario']
     })

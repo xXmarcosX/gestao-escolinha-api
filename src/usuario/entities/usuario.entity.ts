@@ -14,11 +14,13 @@ export class Usuario {
   })
   email: string;
 
+  @Column({name: 'usu_cpf'})
+  cpf: string;
+
   @Column({
     length: 255,
     name: 'usu_senha_hash'
   })
-
   @Exclude()
   senha: string;
 

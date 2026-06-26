@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, ParseIntPipe } from '@nestjs/common';
 import { ResponsavelService } from './responsavel.service';
 import { CreateResponsavelDto } from './dto/create-responsavel.dto';
 import { UpdateResponsavelDto } from './dto/update-responsavel.dto';
@@ -24,23 +24,23 @@ export class ResponsavelController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.responsavelService.findOne(+id);
   }
 
   @Patch('v1/:id')
-  update(@Param('id') id: string, @Body() updateResponsavelDto: UpdateResponsavelDto) {
+  update(@Param('id', ParseIntPipe) id: string, @Body() updateResponsavelDto: UpdateResponsavelDto) {
     return this.responsavelService.update(+id, updateResponsavelDto);
   }
 
   @UseGuards(JwtAuthGuard, SelfOrAdminGuard)
   @Patch('v2/me/:id')
-  updateAuth(@Param('id') id: string, @Body() updateResponsavelDto: UpdateResponsavelDto) {
+  updateAuth(@Param('id', ParseIntPipe) id: string, @Body() updateResponsavelDto: UpdateResponsavelDto) {
     return this.responsavelService.update(+id, updateResponsavelDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.responsavelService.remove(+id);
   }
 }

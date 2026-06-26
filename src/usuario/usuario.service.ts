@@ -59,6 +59,30 @@ export class UsuarioService {
     return exists
   }
 
+  async findByCpf(cpf: string) {
+    const instrutor = await this.usuarioRepository.findOneBy({ cpf })
+
+    if (!instrutor) throw new BadRequestException('Usuário não encontrado.')
+
+    return instrutor
+  }
+
+  async failIfCpfExists(cpf: string) {
+    const exists = await this.usuarioRepository.existsBy({ cpf })
+
+    if (exists) throw new ConflictException('CPF já cadastrado.')
+
+    return exists
+  }
+
+  async failIfCpfNotExists(cpf: string) {
+    const exists = await this.usuarioRepository.existsBy({ cpf })
+
+    if (!exists) throw new ConflictException('Usuário não cadastrado.')
+
+    return exists
+  }
+
   async save(user: Usuario) {
     return this.usuarioRepository.save(user)
   }

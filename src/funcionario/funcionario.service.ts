@@ -21,7 +21,7 @@ export class FuncionarioService {
     if (!createFuncionarioDto) throw new BadRequestException('Dados não enviados')
 
     await this.usuarioService.failIfEmailExists(createFuncionarioDto.usuario.email);
-    await this.failIfCpfExists(createFuncionarioDto.cpf);
+    await this.usuarioService.failIfCpfExists(createFuncionarioDto.usuario.cpf);
 
     const hashedPassword = await this.hashingService.hash(createFuncionarioDto.usuario.senha)
     createFuncionarioDto.usuario.senha = hashedPassword
@@ -60,8 +60,8 @@ export class FuncionarioService {
 
     const responsavel = await this.findOne(id)
 
-    if (updateFuncionarioDto.cpf && updateFuncionarioDto.cpf !== responsavel.cpf) {
-      await this.failIfCpfExists(updateFuncionarioDto.cpf)
+    if (updateFuncionarioDto.usuario?.cpf && updateFuncionarioDto.usuario.cpf !== responsavel.usuario.cpf) {
+      await this.usuarioService.failIfCpfExists(updateFuncionarioDto.usuario.cpf)
     }
 
     this.funcionarioRepostory.merge(responsavel, updateFuncionarioDto)
@@ -80,16 +80,8 @@ export class FuncionarioService {
 
     const usuarioId = funcionario.usuario?.id ? funcionario.usuario.id : -1;
 
-    await this.funcionarioRepostory.delete(id);
     await this.usuarioService.remove(usuarioId);
-  }
-
-  async failIfCpfExists(cpf: string) {
-    const exists = await this.funcionarioRepostory.existsBy({ cpf })
-
-    if (exists) throw new ConflictException('CPF já cadastrado.')
-
-    return exists
+    return await this.funcionarioRepostory.remove(funcionario);
   }
 
   async findByUserId(id: number) {
@@ -103,5 +95,18 @@ export class FuncionarioService {
     if (!funcionario) throw new NotFoundException('Usuário não encontrado,')
 
     return funcionario
+  }
+
+  async findByUserCpf(cpf: string) {
+    const responsavel = await this.funcionarioRepostory.findOne({
+      where: {
+        usuario: { cpf }
+      },
+      relations: ['usuario']
+    })
+
+    if (!responsavel) throw new NotFoundException('Usuário não encontrado,')
+
+    return responsavel
   }
 }

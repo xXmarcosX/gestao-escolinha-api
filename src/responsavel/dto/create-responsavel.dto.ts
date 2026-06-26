@@ -22,11 +22,6 @@ export class CreateResponsavelDto {
   @IsString()
   @IsNotEmpty()
   @MaxLength(20)
-  cpf: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(20)
   cep: string;
 
   @IsString()

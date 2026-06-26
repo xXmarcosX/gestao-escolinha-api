@@ -16,9 +16,6 @@ export class Instrutor {
   @Column({ name: 'ins_data_nascimento' })
   dataNascimento: Date;
 
-  @Column({ name: 'ins_cpf', length: 20, unique: true })
-  cpf: string;
-
   @Column({ name: 'ins_cep', length: 20 })
   cep: string;
 

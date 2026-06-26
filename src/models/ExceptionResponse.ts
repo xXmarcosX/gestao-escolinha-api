@@ -1,4 +1,3 @@
-// exception-response.dto.ts
 export class ExceptionResponse {
   messages: string[];
   status: number;

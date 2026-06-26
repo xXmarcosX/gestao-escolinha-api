@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseBoolPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseBoolPipe, ParseIntPipe } from '@nestjs/common';
 import { LocalTreinoService } from './local-treino.service';
 import { CreateLocalTreinoDto } from './dto/create-local-treino.dto';
 import { UpdateLocalTreinoDto } from './dto/update-local-treino.dto';
@@ -21,17 +21,17 @@ export class LocalTreinoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.localTreinoService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLocalTreinoDto: UpdateLocalTreinoDto) {
+  update(@Param('id', ParseIntPipe) id: string, @Body() updateLocalTreinoDto: UpdateLocalTreinoDto) {
     return this.localTreinoService.update(+id, updateLocalTreinoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.localTreinoService.remove(+id);
   }
 }

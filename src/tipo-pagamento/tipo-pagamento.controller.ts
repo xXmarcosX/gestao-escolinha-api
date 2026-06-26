@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { TipoPagamentoService } from './tipo-pagamento.service';
 import { CreateTipoPagamentoDto } from './dto/create-tipo-pagamento.dto';
 import { UpdateTipoPagamentoDto } from './dto/update-tipo-pagamento.dto';
@@ -18,17 +18,17 @@ export class TipoPagamentoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: string) {
     return this.tipoPagamentoService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTipoPagamentoDto: UpdateTipoPagamentoDto) {
+  update(@Param('id', ParseIntPipe) id: string, @Body() updateTipoPagamentoDto: UpdateTipoPagamentoDto) {
     return this.tipoPagamentoService.update(+id, updateTipoPagamentoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: string) {
     return this.tipoPagamentoService.remove(+id);
   }
 }

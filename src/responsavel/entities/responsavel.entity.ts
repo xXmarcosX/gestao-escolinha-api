@@ -16,9 +16,6 @@ export class Responsavel {
   @Column({ name: 'res_data_nascimento'})
   dataNascimento: Date;
 
-  @Column({ name: 'res_cpf', length: 20, unique: true })
-  cpf: string;
-
   @Column({ name: 'res_cep', length: 20 })
   cep: string;
 
