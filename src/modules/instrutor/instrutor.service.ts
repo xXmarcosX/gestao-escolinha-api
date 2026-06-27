@@ -65,8 +65,18 @@ export class InstrutorService {
       await this.usuarioService.failIfCpfExists(updateInstrutorDto.usuario.cpf)
     }
 
-    this.instrutorRepository.merge(instrutor, updateInstrutorDto)
-    return this.instrutorRepository.save(instrutor)
+    const instrutorAtualizado = await this.instrutorRepository.preload({
+      id,
+      ...updateInstrutorDto,
+      usuario: {
+        id: instrutor.usuario.id,
+        ...updateInstrutorDto.usuario
+      }
+    })
+
+    if (!instrutorAtualizado) throw new BadRequestException('Instrutor não encontrado.')
+
+    return this.instrutorRepository.save(instrutorAtualizado)
   }
 
   async remove(id: number) {

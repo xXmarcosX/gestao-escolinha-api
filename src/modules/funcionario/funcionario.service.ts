@@ -26,7 +26,7 @@ export class FuncionarioService {
     const hashedPassword = await this.hashingService.hash(createFuncionarioDto.usuario.senha)
     createFuncionarioDto.usuario.senha = hashedPassword
 
-    const usuarioCriado = createFuncionarioDto.usuario && await this.usuarioService.create(createFuncionarioDto.usuario);
+    const usuarioCriado = await this.usuarioService.create(createFuncionarioDto.usuario);
 
     const novoResponsavel = this.funcionarioRepostory.create({
       ...createFuncionarioDto,
@@ -58,14 +58,24 @@ export class FuncionarioService {
       throw new BadRequestException('Dados não enviados.')
     }
 
-    const responsavel = await this.findOne(id)
+    const funcionario = await this.findOne(id)
 
-    if (updateFuncionarioDto.usuario?.cpf && updateFuncionarioDto.usuario.cpf !== responsavel.usuario.cpf) {
+    if (updateFuncionarioDto.usuario?.cpf && updateFuncionarioDto.usuario.cpf !== funcionario.usuario.cpf) {
       await this.usuarioService.failIfCpfExists(updateFuncionarioDto.usuario.cpf)
     }
 
-    this.funcionarioRepostory.merge(responsavel, updateFuncionarioDto)
-    return this.funcionarioRepostory.save(responsavel)
+    const funcionarioAtualizado = await this.funcionarioRepostory.preload({
+      id,
+      ...updateFuncionarioDto,
+      usuario: {
+        id: funcionario.usuario.id,
+        ...updateFuncionarioDto.usuario
+      }
+    })
+
+    if (!funcionarioAtualizado) throw new BadRequestException('Funcionário não encontrado.')
+
+    return this.funcionarioRepostory.save(funcionarioAtualizado)
   }
 
   async remove(id: number) {

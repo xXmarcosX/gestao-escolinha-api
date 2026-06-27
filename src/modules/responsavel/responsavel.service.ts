@@ -67,8 +67,18 @@ export class ResponsavelService {
       await this.usuarioService.failIfCpfExists(updateResponsavelDto.usuario.cpf)
     }
 
-    this.responsavelRepository.merge(responsavel, updateResponsavelDto)
-    return this.responsavelRepository.save(responsavel)
+    const responsavelAtualizado = await this.responsavelRepository.preload({
+      id,
+      ...updateResponsavelDto,
+      usuario: {
+        id: responsavel.usuario.id,
+        ...updateResponsavelDto.usuario,
+      }
+    })
+
+    if (!responsavelAtualizado) throw new BadRequestException('Responsável não encontrado.')
+
+    return this.responsavelRepository.save(responsavelAtualizado)
   }
 
   async remove(id: number) {
