@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
-import { AlergiaModule } from './alergia/alergia.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dataSourceOptions } from './config/data-source';
-import { UsuarioModule } from './usuario/usuario.module';
-import { ResponsavelModule } from './responsavel/responsavel.module';
-import { AuthModule } from './auth/auth.module';
-import { TipoEventoMedicoModule } from './tipo-evento-medico/tipo-evento-medico.module';
-import { TipoPagamentoModule } from './tipo-pagamento/tipo-pagamento.module';
-import { LocalTreinoModule } from './local-treino/local-treino.module';
-import { FuncionarioModule } from './funcionario/funcionario.module';
-import { InstrutorModule } from './instrutor/instrutor.module';
-import { AlunoModule } from './aluno/aluno.module';
-import { TurmaModule } from './turma/turma.module';
+import { UsuarioModule } from './modules/usuario/usuario.module';
+import { ResponsavelModule } from './modules/responsavel/responsavel.module';
+import { TipoEventoMedicoModule } from './modules/tipo-evento-medico/tipo-evento-medico.module';
+import { TipoPagamentoModule } from './modules/tipo-pagamento/tipo-pagamento.module';
+import { LocalTreinoModule } from './modules/local-treino/local-treino.module';
+import { FuncionarioModule } from './modules/funcionario/funcionario.module';
+import { InstrutorModule } from './modules/instrutor/instrutor.module';
+import { AlunoModule } from './modules/aluno/aluno.module';
+import { TurmaModule } from './modules/turma/turma.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { AlergiaModule } from './modules/alergia/alergia.module';
 
 @Module({
   imports: [

@@ -1,4 +1,4 @@
-import { UsuarioPerfil } from "src/usuario/entities/usuario-perfil.enum"
+import { UsuarioPerfil } from "src/modules/usuario/entities/usuario-perfil.enum"
 
 export type JwtPayload = {
   sub: string,
