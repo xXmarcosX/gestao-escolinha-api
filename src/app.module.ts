@@ -13,6 +13,7 @@ import { AlunoModule } from './modules/aluno/aluno.module';
 import { TurmaModule } from './modules/turma/turma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { AlergiaModule } from './modules/alergia/alergia.module';
+import { FichaMedicaAlunoModule } from './modules/ficha-medica-aluno/ficha-medica-aluno.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { AlergiaModule } from './modules/alergia/alergia.module';
     InstrutorModule,
     AlunoModule,
     TurmaModule,
+    FichaMedicaAlunoModule,
 
   ],
   controllers: [],

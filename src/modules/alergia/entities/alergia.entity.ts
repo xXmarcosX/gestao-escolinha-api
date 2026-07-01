@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { FichaMedicaAluno } from "src/modules/ficha-medica-aluno/entities/ficha-medica-aluno.entity";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Alergia {
@@ -9,8 +10,11 @@ export class Alergia {
   tipoAlergia: string;
 
   @CreateDateColumn({ name: 'criado_em', type: 'timestamp' })
-  criadoEm: Date
+  criadoEm: Date;
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
-  atualizadoEm: Date
+  atualizadoEm: Date;
+
+  @ManyToMany(() => FichaMedicaAluno, (fichaMedica) => fichaMedica.alergias)
+  fichasMedicaAlunos: FichaMedicaAluno[];
 }
