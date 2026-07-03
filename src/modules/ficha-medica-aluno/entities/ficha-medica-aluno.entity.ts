@@ -1,7 +1,8 @@
 import { TipoSanguineo } from "src/enums/tipo-sanguineo.enum";
 import { Alergia } from "src/modules/alergia/entities/alergia.entity";
+import { Aluno } from "src/modules/aluno/entities/aluno.entity";
 import { EventosMedicos } from "src/modules/eventos-medicos/entities/eventos-medicos.entity";
-import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({name: 'ficha_medica_aluno'})
 export class FichaMedicaAluno {
@@ -17,7 +18,7 @@ export class FichaMedicaAluno {
   @UpdateDateColumn({name: 'atualizado_em'})
   atualizadoEm: Date;
 
-  @ManyToMany(() => Alergia, (alergia) => alergia.fichasMedicaAlunos)
+  @ManyToMany(() => Alergia, {eager: true})
   @JoinTable({
     name: 'ficha_medica_alergia', 
     joinColumn: { 
@@ -31,6 +32,9 @@ export class FichaMedicaAluno {
   })
   alergias: Alergia[];
 
-  @OneToMany(() => EventosMedicos, (eventos) => eventos.fichasMedicas, {cascade: true})
+  @OneToMany(() => EventosMedicos, (eventos) => eventos.fichaMedica, {cascade: true, eager: true})
   eventosMedicos: EventosMedicos[];
+
+  @OneToOne(() => Aluno, (aluno) => aluno.fichaMedica)
+  aluno: Aluno;
 }
