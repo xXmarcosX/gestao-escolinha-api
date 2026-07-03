@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import { Aluno } from './entities/aluno.entity';
 import { Repository } from 'typeorm';
 import { ResponsavelService } from 'src/modules/responsavel/responsavel.service';
 import { UsuarioService } from 'src/modules/usuario/usuario.service';
+import { FichaMedicaAlunoService } from '../ficha-medica-aluno/ficha-medica-aluno.service';
 
 @Injectable()
 export class AlunoService {
@@ -13,22 +14,35 @@ export class AlunoService {
     @InjectRepository(Aluno)
     private readonly alunoRepository: Repository<Aluno>,
     private readonly responsavelService: ResponsavelService,
-    private readonly usuarioService: UsuarioService
+    private readonly usuarioService: UsuarioService,
+    private readonly fichaMedicaService: FichaMedicaAlunoService
   ) { }
 
   async create(createAlunoDto: CreateAlunoDto) {
     await this.failIfCpfExists(createAlunoDto.cpf)
     await this.failIfEmailExists(createAlunoDto.email)
-    // await this.usuarioService.failIfCpfNotExists(createAlunoDto.responsavel.cpf)
+    await this.usuarioService.failIfCpfNotExists(createAlunoDto.responsavel.cpf)
 
-    const alunoCriado = this.alunoRepository.create(createAlunoDto)
+    const responsavel = await this.responsavelService.findByUserCpf(createAlunoDto.responsavel.cpf)
+
+    const alunoCriado = this.alunoRepository.create({
+      ...createAlunoDto,
+      responsavel,
+      fichaMedica: {
+        ...createAlunoDto.fichaMedica,
+        alergias: createAlunoDto.fichaMedica.alergiasIds?.map(id => ({ id })),
+      }
+    })
 
     return this.alunoRepository.save(alunoCriado)
   }
 
-  findAll() {
-    return this.alunoRepository.find({
+  findAll(isAtivo: boolean) {
+    if (isAtivo) return this.findActiveAlunos()
+
+    else return this.alunoRepository.find({
       relations: {
+        fichaMedica: false,
         responsavel: {
           telefones: true,
           usuario: true
@@ -39,23 +53,98 @@ export class AlunoService {
           primeiroNome: true,
           sobrenome: true,
           telefones: {
-            id: true,
             numero: true
           },
           usuario: {
-            cpf: true
+            email: true
           }
         }
       }
-    });
+    })
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} aluno`;
+  findActiveAlunos() {
+    return this.alunoRepository.find({
+      where: {
+        ativo: true
+      },
+      relations: {
+        fichaMedica: false,
+        responsavel: {
+          telefones: true,
+          usuario: true
+        }
+      },
+      select: {
+        responsavel: {
+          primeiroNome: true,
+          sobrenome: true,
+          telefones: {
+            numero: true
+          },
+          usuario: {
+            email: true
+          }
+        }
+      }
+    })
   }
 
-  update(id: number, updateAlunoDto: UpdateAlunoDto) {
-    return `This action updates a #${id} aluno`;
+  async findOne(id: number) {
+    const aluno = await this.alunoRepository.findOne({
+      where: { id },
+      relations: {
+        fichaMedica: false,
+        responsavel: {
+          telefones: true,
+          usuario: true
+        }
+      },
+      select: {
+        responsavel: {
+          primeiroNome: true,
+          sobrenome: true,
+          telefones: {
+            numero: true
+          },
+          usuario: {
+            email: true
+          }
+        }
+      }
+    })
+
+    if (!aluno) throw new NotFoundException('Aluno não encontrado')
+
+    return aluno
+  }
+
+  async findOneFichaMedica(id: number) {
+    const aluno = await this.alunoRepository.findOne({
+      where: { id },
+      relations: {
+        fichaMedica: true
+      }
+    })
+
+    if (!aluno) throw new NotFoundException('Aluno não encontrado.')
+
+    const fichaMedica = await this.fichaMedicaService.findOne(aluno.fichaMedica.id)
+
+    if (!fichaMedica) throw new NotFoundException('Ficha médica não encontrada.')
+
+    return fichaMedica
+  }
+
+  async update(id: number, updateAlunoDto: UpdateAlunoDto) {
+    const aluno = await this.alunoRepository.preload({
+      id,
+      ...updateAlunoDto,
+    })
+
+    if (!aluno) throw new NotFoundException('Aluno não encontrado.')
+
+    return this.alunoRepository.save(aluno)
   }
 
   remove(id: number) {
@@ -63,7 +152,7 @@ export class AlunoService {
   }
 
   async failIfCpfExists(cpf: string) {
-    const exists = await this.alunoRepository.existsBy({cpf})
+    const exists = await this.alunoRepository.existsBy({ cpf })
 
     if (exists) throw new ConflictException('CPF já cadastrado.')
 

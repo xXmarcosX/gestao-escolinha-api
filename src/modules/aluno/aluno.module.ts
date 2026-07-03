@@ -5,6 +5,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Aluno } from './entities/aluno.entity';
 import { ResponsavelModule } from 'src/modules/responsavel/responsavel.module';
 import { UsuarioModule } from 'src/modules/usuario/usuario.module';
+import { FichaMedicaAlunoModule } from '../ficha-medica-aluno/ficha-medica-aluno.module';
+import { EventosMedicosModule } from '../eventos-medicos/eventos-medicos.module';
 
 @Module({
   controllers: [AlunoController],
@@ -12,7 +14,9 @@ import { UsuarioModule } from 'src/modules/usuario/usuario.module';
   imports: [
     TypeOrmModule.forFeature([Aluno]),
     ResponsavelModule,
-    UsuarioModule
+    UsuarioModule,
+    FichaMedicaAlunoModule,
+    EventosMedicosModule
   ],
   exports: [AlunoService]
 })

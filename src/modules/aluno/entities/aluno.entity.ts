@@ -1,40 +1,45 @@
 import { Sexo } from "src/enums/sexo.enum";
+import { FichaMedicaAluno } from "src/modules/ficha-medica-aluno/entities/ficha-medica-aluno.entity";
 import { Responsavel } from "src/modules/responsavel/entities/responsavel.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
 export class Aluno {
-  @PrimaryGeneratedColumn({name: 'alu_id'})
+  @PrimaryGeneratedColumn({ name: 'alu_id' })
   id: number;
 
-  @Column({name: 'alu_primeiro_nome'})
+  @Column({ name: 'alu_primeiro_nome' })
   primeiroNome: string;
 
-  @Column({name: 'alu_sobrenome'})
+  @Column({ name: 'alu_sobrenome' })
   sobrenome: string;
 
-  @Column({name: 'alu_email'})
+  @Column({ name: 'alu_email' })
   email: string;
 
-  @Column({name: 'alu_cpf'})
+  @Column({ name: 'alu_cpf' })
   cpf: string;
 
-  @Column({name: 'alu_sexo'})
+  @Column({ name: 'alu_sexo' })
   sexo: Sexo;
 
-  @Column({name: 'alu_data_nascimento'})
+  @Column({ name: 'alu_data_nascimento' })
   dataNascimento: Date;
 
-  @Column({name: 'alu_isAtivo'})
+  @Column({ name: 'alu_isAtivo' })
   ativo: boolean;
 
-  @CreateDateColumn({name: 'criado_em'})
+  @CreateDateColumn({ name: 'criado_em' })
   criadoEm: Date;
 
-  @UpdateDateColumn({name: 'atualizado_em'})
+  @UpdateDateColumn({ name: 'atualizado_em' })
   atualizadoEm: Date;
 
   @ManyToOne(() => Responsavel)
-  @JoinColumn({name: 'responsavel_id'})
+  @JoinColumn({ name: 'responsavel_id' })
   responsavel: Responsavel;
+
+  @OneToOne(() => FichaMedicaAluno, { cascade: true })
+  @JoinColumn({ name: 'ficha_medica_id' })
+  fichaMedica: FichaMedicaAluno;
 }

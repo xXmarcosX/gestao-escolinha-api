@@ -1,7 +1,9 @@
 import { Type } from "class-transformer";
-import { IsBoolean, IsDate, IsEmail, IsEnum, IsNotEmpty, IsString, ValidateNested } from "class-validator";
+import { IsBoolean, IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Sexo } from "src/enums/sexo.enum";
-// import { CreateResponsavelAlunoDto } from "src/responsavel/dto/create-responsavel-aluno.dto";
+import { CreateFichaMedicaAlunoDto } from "src/modules/ficha-medica-aluno/dto/create-ficha-medica-aluno.dto";
+import { FichaMedicaAluno } from "src/modules/ficha-medica-aluno/entities/ficha-medica-aluno.entity";
+import { CreateResponsavelAlunoDto } from "src/modules/responsavel/dto/create-responsavel-aluno.dto";
 
 export class CreateAlunoDto {
   @IsString({ message: 'O primeiro nome deve ser uma string válida.' })
@@ -32,7 +34,11 @@ export class CreateAlunoDto {
   @IsNotEmpty({ message: 'O campo "ativo" não pode estar vazio.' })
   ativo: boolean;
 
-  // @ValidateNested()
-  // @Type(() => CreateResponsavelAlunoDto)
-  // responsavel: CreateResponsavelAlunoDto
+  @ValidateNested()
+  @Type(() => CreateResponsavelAlunoDto)
+  responsavel: CreateResponsavelAlunoDto;
+
+  @ValidateNested()
+  @Type(() => CreateFichaMedicaAlunoDto)
+  fichaMedica: CreateFichaMedicaAlunoDto;
 }
