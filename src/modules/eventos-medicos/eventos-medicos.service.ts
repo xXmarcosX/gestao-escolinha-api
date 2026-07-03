@@ -5,7 +5,6 @@ import { EventosMedicos } from './entities/eventos-medicos.entity';
 import { Repository } from 'typeorm';
 import { UpdateEventosMedicosDto } from './dto/update-eventos-medicos.dto';
 import { TipoEventoMedicoService } from '../tipo-evento-medico/tipo-evento-medico.service';
-import { FichaMedicaAluno } from '../ficha-medica-aluno/entities/ficha-medica-aluno.entity';
 
 
 @Injectable()
@@ -22,6 +21,20 @@ export class EventosMedicosService {
     const eventoMedicoCriado = this.eventosMedicosRepository.create({
       ...createEventosMedicosDto,
       tipoEventoMedico: eventoMedico
+    })
+
+    return this.eventosMedicosRepository.save(eventoMedicoCriado);
+  }
+  
+  async add(idFichaMedica: number, createEventosMedicosDto: CreateEventosMedicosDto) {
+    const eventoMedico = await this.tipoEventoMedicoService.findOne(createEventosMedicosDto.tipoEventoMedico)
+
+    const eventoMedicoCriado = this.eventosMedicosRepository.create({
+      ...createEventosMedicosDto,
+      tipoEventoMedico: eventoMedico,
+      fichaMedica: {
+        id: idFichaMedica
+      }
     })
 
     return this.eventosMedicosRepository.save(eventoMedicoCriado);

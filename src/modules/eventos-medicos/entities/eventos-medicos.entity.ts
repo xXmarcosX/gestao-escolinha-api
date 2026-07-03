@@ -25,5 +25,5 @@ export class EventosMedicos {
 
   @ManyToOne(() => FichaMedicaAluno, (fichaMedica) => fichaMedica.eventosMedicos)
   @JoinColumn({name: 'ficha_medica_id'})
-  fichasMedicas: FichaMedicaAluno;
+  fichaMedica: FichaMedicaAluno;
 }
