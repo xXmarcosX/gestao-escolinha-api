@@ -14,7 +14,4 @@ export class Alergia {
 
   @UpdateDateColumn({ name: 'atualizado_em', type: 'timestamp' })
   atualizadoEm: Date;
-
-  @ManyToMany(() => FichaMedicaAluno, (fichaMedica) => fichaMedica.alergias)
-  fichasMedicaAlunos: FichaMedicaAluno[];
 }

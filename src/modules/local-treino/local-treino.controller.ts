@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseBoolPipe
 import { LocalTreinoService } from './local-treino.service';
 import { CreateLocalTreinoDto } from './dto/create-local-treino.dto';
 import { UpdateLocalTreinoDto } from './dto/update-local-treino.dto';
-import { FiltroAtivoDto } from './dto/filtro-ativo-dto';
+import { FiltroAtivoDto } from '../../models/filtro-ativo-dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 
