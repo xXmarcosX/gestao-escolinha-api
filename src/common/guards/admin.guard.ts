@@ -4,6 +4,7 @@ import {
   ExecutionContext, 
   ForbiddenException, 
 } from '@nestjs/common';
+import { isFuncionarioOrAdmin } from 'src/utils/is-funcionario-or-admin';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
@@ -11,7 +12,7 @@ export class AdminGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const user = request.user;
 
-    if (user.role === 'ADMIN' || user.role === 'FUNCIONARIO') {
+    if (isFuncionarioOrAdmin(user.role)) {
       return true;
     }
 

@@ -1,5 +1,5 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString, IsStrongPassword, MaxLength } from "class-validator";
-import { UsuarioPerfil } from "../entities/usuario-perfil.enum";
+import { UsuarioPerfil } from "../../../enums/usuario-perfil.enum";
 
 export class CreateUsuarioDto {
   @IsEmail({}, { message: 'Forneça um e-mail válido.' })

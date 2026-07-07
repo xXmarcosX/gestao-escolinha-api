@@ -5,6 +5,7 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { AlunoService } from 'src/modules/aluno/aluno.service';
+import { isFuncionarioOrAdmin } from 'src/utils/is-funcionario-or-admin';
 
 @Injectable()
 export class ResponsavelAlunoGuard implements CanActivate {
@@ -19,7 +20,7 @@ export class ResponsavelAlunoGuard implements CanActivate {
     const resourceId = request.params.id;
     const aluno = await this.alunoService.findOne(resourceId)
 
-    if (user.role === 'ADMIN' || user.role === 'FUNCIONARIO') {
+    if (isFuncionarioOrAdmin(user.role)) {
       return true;
     }
 

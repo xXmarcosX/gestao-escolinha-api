@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { UsuarioPerfil } from "./usuario-perfil.enum";
+import { UsuarioPerfil } from "../../../enums/usuario-perfil.enum";
 import { Exclude } from "class-transformer";
 
 @Entity()
