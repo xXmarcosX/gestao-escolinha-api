@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
 import { AlunoService } from './aluno.service';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
@@ -7,6 +7,8 @@ import { FichaMedicaAlunoService } from '../ficha-medica-aluno/ficha-medica-alun
 import { EventosMedicosService } from '../eventos-medicos/eventos-medicos.service';
 import { FiltroAtivoDto } from 'src/models/filtro-ativo-dto';
 import { CreateEventosMedicosDto } from '../eventos-medicos/dto/create-eventos-medicos.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { ResponsavelAlunoGuard } from 'src/common/guards/responsavelAluno-or-admin.guard';
 
 @Controller('aluno')
 export class AlunoController {
@@ -45,6 +47,7 @@ export class AlunoController {
     return this.fichaMedicaService.update(fichaMedica.id, updateFichaMedica)
   }
 
+  @UseGuards(JwtAuthGuard, ResponsavelAlunoGuard)
   @Get(':id/ficha-medica')
   findOneFichaMedica(@Param('id', ParseIntPipe) id: number) {
     return this.alunoService.findOneFichaMedica(id)

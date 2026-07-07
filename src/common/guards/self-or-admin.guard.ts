@@ -4,6 +4,7 @@ import {
   ExecutionContext, 
   ForbiddenException 
 } from '@nestjs/common';
+import { JwtPayload } from 'src/models/jwt-payload';
 
 @Injectable()
 export class SelfOrAdminGuard implements CanActivate {

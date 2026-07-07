@@ -102,6 +102,7 @@ export class AlunoService {
       },
       select: {
         responsavel: {
+          id: true,
           primeiroNome: true,
           sobrenome: true,
           telefones: {
