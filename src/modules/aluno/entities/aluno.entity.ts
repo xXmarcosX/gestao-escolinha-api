@@ -39,7 +39,6 @@ export class Aluno {
   @JoinColumn({ name: 'responsavel_id' })
   responsavel: Responsavel;
 
-  @OneToOne(() => FichaMedicaAluno, { cascade: true })
-  @JoinColumn({ name: 'ficha_medica_id' })
+  @OneToOne(() => FichaMedicaAluno, (ficha) => ficha.aluno,  { cascade: true })
   fichaMedica: FichaMedicaAluno;
 }

@@ -23,7 +23,7 @@ export class EventosMedicos {
   @JoinColumn({name: 'tipo_evento_medico_id'})
   tipoEventoMedico: TipoEventoMedico;
 
-  @ManyToOne(() => FichaMedicaAluno, (fichaMedica) => fichaMedica.eventosMedicos)
+  @ManyToOne(() => FichaMedicaAluno, (fichaMedica) => fichaMedica.eventosMedicos, {onDelete: 'CASCADE'})
   @JoinColumn({name: 'ficha_medica_id'})
   fichaMedica: FichaMedicaAluno;
 }

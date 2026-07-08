@@ -63,33 +63,6 @@ export class AlunoService {
     })
   }
 
-  findActiveAlunos() {
-    return this.alunoRepository.find({
-      where: {
-        ativo: true
-      },
-      relations: {
-        fichaMedica: false,
-        responsavel: {
-          telefones: true,
-          usuario: true
-        }
-      },
-      select: {
-        responsavel: {
-          primeiroNome: true,
-          sobrenome: true,
-          telefones: {
-            numero: true
-          },
-          usuario: {
-            email: true
-          }
-        }
-      }
-    })
-  }
-
   async findOne(id: number) {
     const aluno = await this.alunoRepository.findOne({
       where: { id },
@@ -121,18 +94,7 @@ export class AlunoService {
   }
 
   async findOneFichaMedica(id: number) {
-    const aluno = await this.alunoRepository.findOne({
-      where: { id },
-      relations: {
-        fichaMedica: true
-      }
-    })
-
-    if (!aluno) throw new NotFoundException('Aluno não encontrado.')
-
-    const fichaMedica = await this.fichaMedicaService.findOne(aluno.fichaMedica.id)
-
-    if (!fichaMedica) throw new NotFoundException('Ficha médica não encontrada.')
+    const fichaMedica = await this.fichaMedicaService.findOneByAlunoId(id)
 
     return fichaMedica
   }
@@ -148,8 +110,15 @@ export class AlunoService {
     return this.alunoRepository.save(aluno)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} aluno`;
+  async remove(id: number) {
+    const aluno = await this.alunoRepository.findOne({
+      where: { id },
+      relations: ['fichaMedica']
+    })
+
+    if (!aluno) throw new NotFoundException('Aluno não encontrado')
+
+    return await this.alunoRepository.remove(aluno)
   }
 
   async failIfCpfExists(cpf: string) {
@@ -166,5 +135,32 @@ export class AlunoService {
     if (exists) throw new ConflictException('E-mail já cadastrado.')
 
     return exists
+  }
+
+  findActiveAlunos() {
+    return this.alunoRepository.find({
+      where: {
+        ativo: true
+      },
+      relations: {
+        fichaMedica: false,
+        responsavel: {
+          telefones: true,
+          usuario: true
+        }
+      },
+      select: {
+        responsavel: {
+          primeiroNome: true,
+          sobrenome: true,
+          telefones: {
+            numero: true
+          },
+          usuario: {
+            email: true
+          }
+        }
+      }
+    })
   }
 }

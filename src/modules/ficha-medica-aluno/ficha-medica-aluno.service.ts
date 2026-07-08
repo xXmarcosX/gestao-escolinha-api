@@ -4,6 +4,7 @@ import { UpdateFichaMedicaAlunoDto } from './dto/update-ficha-medica-aluno.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FichaMedicaAluno } from './entities/ficha-medica-aluno.entity';
 import { Repository } from 'typeorm';
+import { Aluno } from '../aluno/entities/aluno.entity';
 
 @Injectable()
 export class FichaMedicaAlunoService {
@@ -57,6 +58,23 @@ export class FichaMedicaAlunoService {
     return fichaMedica;
   }
 
+  async findOneByAlunoId(idAluno: number) {
+    const fichaMedica = await this.fichaMedicaRepository.findOne({
+      where: {
+        aluno: {
+          id: idAluno
+        }
+      },
+      relations: ['alergias', 'eventosMedicos', 'eventosMedicos.tipoEventoMedico']
+    })
+
+    if (!fichaMedica) {
+      throw new NotFoundException(`Ficha médica não encontrada.`);
+    }
+
+    return fichaMedica
+  }
+
   async update(id: number, updateFichaMedicaAlunoDto: UpdateFichaMedicaAlunoDto) {
     const fichaMedica = await this.fichaMedicaRepository.preload({
       id,
@@ -74,6 +92,6 @@ export class FichaMedicaAlunoService {
   async remove(id: number) {
     const fichaMedica = await this.findOne(id)
 
-    return this.fichaMedicaRepository.delete(fichaMedica)
+    return this.fichaMedicaRepository.remove(fichaMedica)
   }
 }
