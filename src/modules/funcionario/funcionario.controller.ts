@@ -1,11 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { FuncionarioService } from './funcionario.service';
 import { CreateFuncionarioDto } from './dto/create-funcionario.dto';
 import { UpdateFuncionarioDto } from './dto/update-funcionario.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { AdminGuard } from 'src/common/guards/admin.guard';
+import { TicketService } from '../ticket/ticket.service';
 
 @Controller('funcionario')
 export class FuncionarioController {
-  constructor(private readonly funcionarioService: FuncionarioService) {}
+  constructor(
+    private readonly funcionarioService: FuncionarioService,
+    private readonly ticketService: TicketService
+  ) {}
 
   @Post()
   create(@Body() createFuncionarioDto: CreateFuncionarioDto) {
@@ -30,5 +36,11 @@ export class FuncionarioController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: string) {
     return this.funcionarioService.remove(+id);
+  }
+
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @Get('me/ticket')
+  getTickets() {
+    return this.ticketService.findAll()
   }
 }

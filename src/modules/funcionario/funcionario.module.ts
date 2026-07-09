@@ -5,6 +5,7 @@ import { UsuarioModule } from 'src/modules/usuario/usuario.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Funcionario } from './entities/funcionario.entity';
 import { AuthModule } from '../auth/auth.module';
+import { TicketModule } from '../ticket/ticket.module';
 
 @Module({
   controllers: [FuncionarioController],
@@ -12,7 +13,8 @@ import { AuthModule } from '../auth/auth.module';
   imports: [
     TypeOrmModule.forFeature([Funcionario]),
     UsuarioModule,
-    forwardRef(() => AuthModule)
+    forwardRef(() => AuthModule),
+    TicketModule
   ],
   exports: [FuncionarioService]
 })

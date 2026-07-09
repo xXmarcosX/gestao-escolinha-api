@@ -4,7 +4,6 @@ import {
   ExecutionContext,
   ForbiddenException
 } from '@nestjs/common';
-import { JwtPayload } from 'src/models/jwt-payload';
 import { isFuncionarioOrAdmin } from 'src/utils/is-funcionario-or-admin';
 
 @Injectable()

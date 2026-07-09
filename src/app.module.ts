@@ -15,6 +15,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { AlergiaModule } from './modules/alergia/alergia.module';
 import { FichaMedicaAlunoModule } from './modules/ficha-medica-aluno/ficha-medica-aluno.module';
 import { EventosMedicosModule } from './modules/eventos-medicos/eventos-medicos.module';
+import { TicketModule } from './modules/ticket/ticket.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { EventosMedicosModule } from './modules/eventos-medicos/eventos-medicos.
     TurmaModule,
     EventosMedicosModule,
     FichaMedicaAlunoModule,
+    TicketModule,
 
   ],
   controllers: [],
