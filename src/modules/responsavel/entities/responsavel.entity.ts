@@ -1,6 +1,7 @@
 import { Usuario } from "src/modules/usuario/entities/usuario.entity";
-import { Column, CreateDateColumn, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { TelefoneResponsavel } from '../telefone-responsavel/entities/telefone-responsavel.entity';
+import { Aluno } from "src/modules/aluno/entities/aluno.entity";
 
 @Entity()
 export class Responsavel {
@@ -49,4 +50,7 @@ export class Responsavel {
 
   @OneToMany(() => TelefoneResponsavel, (telefone) => telefone.responsavel, {cascade: true, onDelete: 'CASCADE'})
   telefones: TelefoneResponsavel[];
+
+  @OneToMany(() => Aluno, (aluno) => aluno.responsavel)
+  alunos: Aluno[];
 }

@@ -1,14 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, ClassSerializerInterceptor, UseGuards, ParseIntPipe, Req } from '@nestjs/common';
 import { ResponsavelService } from './responsavel.service';
 import { CreateResponsavelDto } from './dto/create-responsavel.dto';
 import { UpdateResponsavelDto } from './dto/update-responsavel.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { SelfOrAdminGuard } from 'src/common/guards/self-or-admin.guard';
+import { CreateTicketDto } from '../ticket/dto/create-ticket.dto';
+import { TicketService } from '../ticket/ticket.service';
+import type { AuthenticatedRequest } from 'src/types/authenticated-request';
 
 @Controller('responsavel')
 export class ResponsavelController {
   constructor(
     private readonly responsavelService: ResponsavelService,
+    private readonly ticketService: TicketService
   ) { }
 
   @Post()
@@ -42,5 +46,14 @@ export class ResponsavelController {
   @Delete(':id')
   remove(@Param('id', ParseIntPipe) id: string) {
     return this.responsavelService.remove(+id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('me/ticket')
+  createTicket(
+    @Req() req: AuthenticatedRequest,
+    @Body() createTicketDto: CreateTicketDto
+  ) {
+    return this.ticketService.create(createTicketDto, +req.user.sub)
   }
 }

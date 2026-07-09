@@ -6,6 +6,7 @@ import { Responsavel } from './entities/responsavel.entity';
 import { UsuarioModule } from 'src/modules/usuario/usuario.module';
 import { TelefoneResponsavelModule } from './telefone-responsavel/telefone-responsavel.module';
 import { AuthModule } from '../auth/auth.module';
+import { TicketModule } from '../ticket/ticket.module';
 
 @Module({
   controllers: [ResponsavelController],
@@ -14,7 +15,8 @@ import { AuthModule } from '../auth/auth.module';
     TypeOrmModule.forFeature([Responsavel]),
     UsuarioModule,
     TelefoneResponsavelModule,
-    AuthModule
+    AuthModule,
+    TicketModule
   ],
   exports: [ResponsavelService]
 })
