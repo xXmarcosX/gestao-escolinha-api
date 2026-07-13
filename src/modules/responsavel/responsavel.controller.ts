@@ -7,6 +7,8 @@ import { SelfOrAdminGuard } from 'src/common/guards/self-or-admin.guard';
 import { CreateTicketDto } from '../ticket/dto/create-ticket.dto';
 import { TicketService } from '../ticket/ticket.service';
 import type { AuthenticatedRequest } from 'src/types/authenticated-request';
+import { AdminGuard } from 'src/common/guards/admin.guard';
+import { NewTicketResponseDto } from '../ticket/dto/new-ticket-response.dto';
 
 @Controller('responsavel')
 export class ResponsavelController {
@@ -20,6 +22,7 @@ export class ResponsavelController {
     return await this.responsavelService.create(createResponsavelDto)
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
@@ -50,10 +53,12 @@ export class ResponsavelController {
 
   @UseGuards(JwtAuthGuard)
   @Post('me/ticket')
-  createTicket(
+  async createTicket(
     @Req() req: AuthenticatedRequest,
     @Body() createTicketDto: CreateTicketDto
   ) {
-    return this.ticketService.create(createTicketDto, +req.user.sub)
+    const ticket = await this.ticketService.create(createTicketDto, +req.user.sub)
+
+    return new NewTicketResponseDto(ticket)
   }
 }

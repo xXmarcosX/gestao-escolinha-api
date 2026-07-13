@@ -4,26 +4,32 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGenerat
 
 @Entity()
 export class Ticket {
-  @PrimaryGeneratedColumn({name: 'tic_id'})
+  @PrimaryGeneratedColumn({ name: 'tic_id' })
   id: number;
 
-  @Column({name: 'tic_conteudo'})
+  @Column({ name: 'tic_assunto' })
+  assunto: string;
+
+  @Column({ name: 'tic_conteudo' })
   conteudo: string;
 
-  @CreateDateColumn({name: 'tic_data_emitido'})
+  @CreateDateColumn({ name: 'tic_data_emitido' })
   dataEmitido: Date;
 
-  @Column({name: 'tic_isRespondido'})
+  @Column({ name: 'tic_isRespondido' })
   isRespondido: boolean;
 
-  @Column({name: 'tic_data_resposta'})
+  @Column({ name: 'tic_resposta' })
+  resposta: string;
+
+  @Column({ name: 'tic_data_resposta' })
   dataResposta: Date;
 
   @ManyToOne(() => Responsavel)
-  @JoinColumn({name: 'responsavel_id'})
+  @JoinColumn({ name: 'responsavel_id' })
   responsavel: Responsavel;
 
   @ManyToOne(() => Funcionario)
-  @JoinColumn({name: 'funcionario_id'})
+  @JoinColumn({ name: 'funcionario_id' })
   funcionario: Funcionario | null;
 }

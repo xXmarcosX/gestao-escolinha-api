@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { InstrutorService } from './instrutor.service';
 import { CreateInstrutorDto } from './dto/create-instrutor.dto';
 import { UpdateInstrutorDto } from './dto/update-instrutor.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('instrutor')
 export class InstrutorController {
@@ -12,6 +14,7 @@ export class InstrutorController {
     return this.instrutorService.create(createInstrutorDto);
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Get()
   findAll() {
     return this.instrutorService.findAll();

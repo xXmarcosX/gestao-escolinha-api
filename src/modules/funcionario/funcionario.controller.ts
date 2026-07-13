@@ -1,17 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards, Query, Req } from '@nestjs/common';
 import { FuncionarioService } from './funcionario.service';
 import { CreateFuncionarioDto } from './dto/create-funcionario.dto';
 import { UpdateFuncionarioDto } from './dto/update-funcionario.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { TicketService } from '../ticket/ticket.service';
+import { FiltroRespondidoDto } from '../ticket/dto/filtro-respondido.dto';
+import type { AuthenticatedRequest } from 'src/types/authenticated-request';
+import { AnswerTicketDto } from '../ticket/dto/answer-ticket.dto';
 
 @Controller('funcionario')
 export class FuncionarioController {
   constructor(
     private readonly funcionarioService: FuncionarioService,
     private readonly ticketService: TicketService
-  ) {}
+  ) { }
 
   @Post()
   create(@Body() createFuncionarioDto: CreateFuncionarioDto) {
@@ -39,8 +42,16 @@ export class FuncionarioController {
   }
 
   @UseGuards(JwtAuthGuard, AdminGuard)
-  @Get('me/ticket')
-  getTickets() {
-    return this.ticketService.findAll()
+  @Patch('me/ticket/:id')
+  answerTicket(
+    @Req() req: AuthenticatedRequest,
+    @Body() answerTicketDto: AnswerTicketDto,
+    @Param('id') ticketId: string
+  ) {
+    return this.ticketService.answerTicket(
+      +ticketId,
+      answerTicketDto,
+      +req.user.sub
+    )
   }
 }
