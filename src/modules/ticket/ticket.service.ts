@@ -86,8 +86,22 @@ export class TicketService {
     return ticket
   }
 
-  update(id: number, updateTicketDto: UpdateTicketDto) {
-    return `This action updates a #${id} ticket`;
+  async update(updateTicketDto: UpdateTicketDto, idResponsavel: number, id: number) {
+    if (!updateTicketDto) throw new BadRequestException('Dados não enviados.')
+
+    const ticketAtualizado = await this.ticketRepository.preload({
+      id,
+      ...updateTicketDto,
+      responsavel: {
+        id: idResponsavel
+      }
+    })
+
+    if (!ticketAtualizado) throw new NotFoundException('Ticket não encontrado.')
+
+    await this.ticketRepository.save(ticketAtualizado)
+
+    return this.findOne(id)
   }
 
   remove(id: number) {

@@ -5,7 +5,7 @@ import { UpdateFuncionarioDto } from './dto/update-funcionario.dto';
 import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { TicketService } from '../ticket/ticket.service';
-import { FiltroRespondidoDto } from '../ticket/dto/filtro-respondido.dto';
+import { FiltroRespondidoDto } from '../../models/filtro-respondido.dto';
 import type { AuthenticatedRequest } from 'src/types/authenticated-request';
 import { AnswerTicketDto } from '../ticket/dto/answer-ticket.dto';
 

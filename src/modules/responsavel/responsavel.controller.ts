@@ -9,6 +9,7 @@ import { TicketService } from '../ticket/ticket.service';
 import type { AuthenticatedRequest } from 'src/types/authenticated-request';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { NewTicketResponseDto } from '../ticket/dto/new-ticket-response.dto';
+import { UpdateTicketDto } from '../ticket/dto/update-ticket.dto';
 
 @Controller('responsavel')
 export class ResponsavelController {
@@ -58,6 +59,18 @@ export class ResponsavelController {
     @Body() createTicketDto: CreateTicketDto
   ) {
     const ticket = await this.ticketService.create(createTicketDto, +req.user.sub)
+
+    return new NewTicketResponseDto(ticket)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('me/ticket/:id')
+  async updateTicketTicket(
+    @Req() req: AuthenticatedRequest,
+    @Body() createTicketDto: UpdateTicketDto,
+    @Param('id', ParseIntPipe) id: string
+  ) {
+    const ticket = await this.ticketService.update(createTicketDto, +req.user.sub, +id)
 
     return new NewTicketResponseDto(ticket)
   }

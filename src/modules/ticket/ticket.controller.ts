@@ -2,7 +2,7 @@ import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from "@nestjs/
 import { TicketService } from "./ticket.service";
 import { JwtAuthGuard } from "src/common/guards/jwt-auth.guard";
 import { AdminGuard } from "src/common/guards/admin.guard";
-import { FiltroRespondidoDto } from "./dto/filtro-respondido.dto";
+import { FiltroRespondidoDto } from "../../models/filtro-respondido.dto";
 import { NewTicketResponseDto } from "./dto/new-ticket-response.dto";
 
 @Controller('ticket')
