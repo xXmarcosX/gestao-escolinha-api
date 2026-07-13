@@ -74,4 +74,13 @@ export class ResponsavelController {
 
     return new NewTicketResponseDto(ticket)
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('me/ticket/:id')
+  async deleteTicket(
+    @Req() req: AuthenticatedRequest,
+    @Param('id', ParseIntPipe) id: string
+  ) {
+    return this.ticketService.remove(+id, +req.user.sub)
+  }
 }

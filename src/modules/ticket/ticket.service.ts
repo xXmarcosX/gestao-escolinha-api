@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -104,8 +104,13 @@ export class TicketService {
     return this.findOne(id)
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} ticket`;
+  async remove(id: number, idUsuario: number) {
+    const ticket = await this.findOne(id)
+
+    if (ticket.responsavel.id !== idUsuario) 
+      throw new ForbiddenException('Você não tem permissão para alterar estes dados.')
+
+    return this.ticketRepository.remove(ticket)
   }
 
   async answerTicket(id: number, answerTicketDto: AnswerTicketDto, idFuncionario: number) {
