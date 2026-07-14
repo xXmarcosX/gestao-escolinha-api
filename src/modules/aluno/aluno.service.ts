@@ -1,9 +1,9 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Aluno } from './entities/aluno.entity';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { ResponsavelService } from 'src/modules/responsavel/responsavel.service';
 import { UsuarioService } from 'src/modules/usuario/usuario.service';
 import { FichaMedicaAlunoService } from '../ficha-medica-aluno/ficha-medica-aluno.service';
@@ -159,6 +159,31 @@ export class AlunoService {
           usuario: {
             email: true
           }
+        }
+      }
+    })
+  }
+
+  async insertAlunoTurma(idAluno: number, idTurma: number) {
+    if (!idAluno) throw new BadRequestException('id do aluno não enviado.')
+
+    const aluno = await this.alunoRepository.preload({
+      id: idAluno,
+      turma: {
+        id: idTurma
+      }
+    })
+
+    if (!aluno) throw new NotFoundException(`Aluno com id ${idAluno} não encontrado. `)
+
+    return this.alunoRepository.save(aluno)
+  }
+
+  findAllByTurmaId(idTurma: number) {
+    return this.alunoRepository.find({
+      where: {
+        turma: {
+          id: idTurma
         }
       }
     })

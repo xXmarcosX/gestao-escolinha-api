@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Turma } from './entities/turma.entity';
 import { InstrutorModule } from 'src/modules/instrutor/instrutor.module';
 import { UsuarioModule } from 'src/modules/usuario/usuario.module';
+import { AlunoModule } from '../aluno/aluno.module';
 
 @Module({
   controllers: [TurmaController],
@@ -12,7 +13,8 @@ import { UsuarioModule } from 'src/modules/usuario/usuario.module';
   imports: [
     TypeOrmModule.forFeature([Turma]),
     InstrutorModule,
-    UsuarioModule
+    UsuarioModule,
+    AlunoModule
   ]
 })
 export class TurmaModule {}

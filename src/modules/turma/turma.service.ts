@@ -6,6 +6,8 @@ import { Turma } from './entities/turma.entity';
 import { Repository } from 'typeorm';
 import { InstrutorService } from 'src/modules/instrutor/instrutor.service';
 import { UsuarioService } from 'src/modules/usuario/usuario.service';
+import { InsertAlunoTurmaDto } from './dto/insert-aluno-turma.dto';
+import { AlunoService } from '../aluno/aluno.service';
 
 @Injectable()
 export class TurmaService {
@@ -13,7 +15,8 @@ export class TurmaService {
     @InjectRepository(Turma)
     private readonly turmaRepository: Repository<Turma>,
     private readonly instrutorService: InstrutorService,
-    private readonly usuarioService: UsuarioService
+    private readonly usuarioService: UsuarioService,
+    private readonly alunoService: AlunoService
   ) { }
 
   async create(createTurmaDto: CreateTurmaDto) {
@@ -60,7 +63,7 @@ export class TurmaService {
       await this.usuarioService.failIfCpfNotExists(updateTurmaDto.instrutor.cpf)
     }
 
-    const instrutor = updateTurmaDto.instrutor?.cpf ? await this.instrutorService.findByUserCpf(updateTurmaDto.instrutor.cpf ) : undefined
+    const instrutor = updateTurmaDto.instrutor?.cpf ? await this.instrutorService.findByUserCpf(updateTurmaDto.instrutor.cpf) : undefined
 
     const turma = await this.turmaRepository.preload({
       id: id,
@@ -77,5 +80,15 @@ export class TurmaService {
     const turma = await this.findOne(id)
 
     return this.turmaRepository.remove(turma)
+  }
+
+  async insertAlunos(idsAlunos: InsertAlunoTurmaDto, idTurma: number) {
+
+    for (const id of idsAlunos.idsAlunos) {
+      await this.alunoService.insertAlunoTurma(id, idTurma);
+    }
+
+
+    return 'teste'
   }
 }

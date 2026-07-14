@@ -1,6 +1,7 @@
 import { Sexo } from "src/enums/sexo.enum";
 import { FichaMedicaAluno } from "src/modules/ficha-medica-aluno/entities/ficha-medica-aluno.entity";
 import { Responsavel } from "src/modules/responsavel/entities/responsavel.entity";
+import { Turma } from "src/modules/turma/entities/turma.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity()
@@ -41,4 +42,8 @@ export class Aluno {
 
   @OneToOne(() => FichaMedicaAluno, (ficha) => ficha.aluno,  { cascade: true })
   fichaMedica: FichaMedicaAluno;
+
+  @ManyToOne(() => Turma, (turma) => turma.alunos)
+  @JoinColumn({name: 'turma_id'})
+  turma: Turma;
 }
