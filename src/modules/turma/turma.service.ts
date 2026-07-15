@@ -83,12 +83,10 @@ export class TurmaService {
   }
 
   async insertAlunos(idsAlunos: InsertAlunoTurmaDto, idTurma: number) {
-
     for (const id of idsAlunos.idsAlunos) {
       await this.alunoService.insertAlunoTurma(id, idTurma);
     }
 
-
-    return 'teste'
+    return this.alunoService.findAllByTurmaId(idTurma)
   }
 }
