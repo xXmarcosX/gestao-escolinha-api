@@ -10,6 +10,7 @@ import type { AuthenticatedRequest } from 'src/types/authenticated-request';
 import { AdminGuard } from 'src/common/guards/admin.guard';
 import { NewTicketResponseDto } from '../ticket/dto/new-ticket-response.dto';
 import { UpdateTicketDto } from '../ticket/dto/update-ticket.dto';
+import { ResponsavelResponseDto } from './dto/responsavel-response.dto';
 
 @Controller('responsavel')
 export class ResponsavelController {
@@ -24,10 +25,11 @@ export class ResponsavelController {
   }
 
   @UseGuards(JwtAuthGuard, AdminGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findAll() {
-    return this.responsavelService.findAll();
+  async findAll() {
+    const responsaveis = await this.responsavelService.findAll();
+
+    return responsaveis.map(resp => new ResponsavelResponseDto(resp))
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -61,6 +63,16 @@ export class ResponsavelController {
     const ticket = await this.ticketService.create(createTicketDto, +req.user.sub)
 
     return new NewTicketResponseDto(ticket)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me/ticket')
+  async getResponsavelTickets(
+    @Req() req: AuthenticatedRequest,
+  ) {
+    const tickets = await this.ticketService.getResponsavelTickets(+req.user.sub)
+
+    return tickets.map(ticket => new NewTicketResponseDto(ticket))
   }
 
   @UseGuards(JwtAuthGuard)

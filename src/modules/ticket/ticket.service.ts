@@ -107,7 +107,7 @@ export class TicketService {
   async remove(id: number, idUsuario: number) {
     const ticket = await this.findOne(id)
 
-    if (ticket.responsavel.id !== idUsuario) 
+    if (ticket.responsavel.id !== idUsuario)
       throw new ForbiddenException('Você não tem permissão para alterar estes dados.')
 
     return this.ticketRepository.remove(ticket)
@@ -129,5 +129,22 @@ export class TicketService {
     if (!ticket) throw new NotFoundException('Ticket não encontrado.')
 
     return this.ticketRepository.save(ticket)
+  }
+
+  getResponsavelTickets(responsavelId: number) {
+    return this.ticketRepository.find({
+      relations: {
+        responsavel: {
+          telefones: true,
+          usuario: true,
+          alunos: true
+        }
+      },
+      where: {
+        responsavel: {
+          id: responsavelId
+        }
+      },
+    })
   }
 }
