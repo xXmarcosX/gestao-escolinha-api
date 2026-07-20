@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   controllers: [LocalTreinoController],
   providers: [LocalTreinoService],
-  imports: [TypeOrmModule.forFeature([LocalTreino])]
+  imports: [TypeOrmModule.forFeature([LocalTreino])],
+  exports: [LocalTreinoService]
 })
 export class LocalTreinoModule {}

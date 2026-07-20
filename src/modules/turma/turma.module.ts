@@ -15,6 +15,7 @@ import { AlunoModule } from '../aluno/aluno.module';
     InstrutorModule,
     UsuarioModule,
     AlunoModule
-  ]
+  ],
+  exports: [TurmaService]
 })
 export class TurmaModule {}
