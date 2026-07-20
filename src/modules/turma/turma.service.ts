@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateTurmaDto } from './dto/create-turma.dto';
 import { UpdateTurmaDto } from './dto/update-turma.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -77,7 +77,16 @@ export class TurmaService {
   }
 
   async remove(id: number) {
-    const turma = await this.findOne(id)
+    const turma = await this.turmaRepository.findOne({
+    where: { id },
+    relations: ['alunos'], 
+  });
+
+  if (!turma) throw new NotFoundException('Turma não encontrada');
+
+  if (turma.alunos && turma.alunos.length > 0) {
+    throw new ForbiddenException('Não é possível deletar uma turma com alunos cadastrados.');
+  }
 
     return this.turmaRepository.remove(turma)
   }
