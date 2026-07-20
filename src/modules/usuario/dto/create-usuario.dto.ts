@@ -2,7 +2,7 @@ import { IsEmail, IsEnum, IsNotEmpty, IsString, IsStrongPassword, MaxLength } fr
 import { UsuarioPerfil } from "../../../enums/usuario-perfil.enum";
 
 export class CreateUsuarioDto {
-  @IsEmail({}, { message: 'Forneça um e-mail válido.' })
+  @IsEmail({}, { message: 'O e-mail fornecido é inválido.' })
   @IsNotEmpty()
   email: string;
 
@@ -15,9 +15,11 @@ export class CreateUsuarioDto {
     minLength: 6,
     minUppercase: 1,
     minSymbols: 1,
-    minNumbers: 1
+    minNumbers: 1,
+  }, {
+    message: 'A senha deve conter no mínimo 6 caracteres, com pelo menos uma letra maiúscula, um número e um símbolo.'
   })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'O campo senha não pode estar vazio.' })
   senha: string;
 
   @IsEnum(UsuarioPerfil, { message: 'Tipo de perfil inválido.' })
