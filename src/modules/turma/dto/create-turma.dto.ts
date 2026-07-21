@@ -1,13 +1,11 @@
-import { Type } from "class-transformer";
-import { IsNotEmpty, IsString, ValidateNested } from "class-validator";
-import { CreateInstrutorTurmaDto } from "src/modules/instrutor/dto/create-instrutor-turma.dto";
+import { IsNotEmpty, IsNumber, IsString, ValidateNested } from "class-validator";
 
 export class CreateTurmaDto {
   @IsString()
   @IsNotEmpty()
   nomeTurma: string;
 
-  @ValidateNested()
-  @Type(() => CreateInstrutorTurmaDto)
-  instrutor: CreateInstrutorTurmaDto;
+  @IsNumber()
+  @IsNotEmpty()
+  instrutorId: number;
 }

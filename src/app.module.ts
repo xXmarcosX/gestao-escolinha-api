@@ -20,7 +20,6 @@ import { TreinoModule } from './modules/treino/treino.module';
 
 @Module({
   imports: [
-
     ConfigModule.forRoot({
       isGlobal: true
     }),
