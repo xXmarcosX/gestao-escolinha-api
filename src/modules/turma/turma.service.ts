@@ -20,7 +20,7 @@ export class TurmaService {
   ) { }
 
   async create(createTurmaDto: CreateTurmaDto) {
-    const instrutor = await this.instrutorService.findByUserCpf(createTurmaDto.instrutor.cpf)
+    const instrutor = await this.instrutorService.findOne(createTurmaDto.instrutorId)
 
     const turmaCriada = this.turmaRepository.create({
       ...createTurmaDto,
@@ -59,16 +59,13 @@ export class TurmaService {
 
   async update(id: number, updateTurmaDto: UpdateTurmaDto) {
     if (!updateTurmaDto) throw new BadRequestException('Dados não enviados.')
-    if (updateTurmaDto.instrutor?.cpf) {
-      await this.usuarioService.failIfCpfNotExists(updateTurmaDto.instrutor.cpf)
-    }
-
-    const instrutor = updateTurmaDto.instrutor?.cpf ? await this.instrutorService.findByUserCpf(updateTurmaDto.instrutor.cpf) : undefined
 
     const turma = await this.turmaRepository.preload({
       id: id,
       ...updateTurmaDto,
-      instrutor
+      instrutor: (
+        updateTurmaDto.instrutorId ?
+          await this.instrutorService.findOne(updateTurmaDto.instrutorId) : undefined)
     })
 
     if (!turma) throw new NotFoundException(`Turma não cadastrada.`)
@@ -78,15 +75,15 @@ export class TurmaService {
 
   async remove(id: number) {
     const turma = await this.turmaRepository.findOne({
-    where: { id },
-    relations: ['alunos'], 
-  });
+      where: { id },
+      relations: ['alunos'],
+    });
 
-  if (!turma) throw new NotFoundException('Turma não encontrada');
+    if (!turma) throw new NotFoundException('Turma não encontrada');
 
-  if (turma.alunos && turma.alunos.length > 0) {
-    throw new ForbiddenException('Não é possível deletar uma turma com alunos cadastrados.');
-  }
+    if (turma.alunos && turma.alunos.length > 0) {
+      throw new ForbiddenException('Não é possível deletar uma turma com alunos cadastrados.');
+    }
 
     return this.turmaRepository.remove(turma)
   }
