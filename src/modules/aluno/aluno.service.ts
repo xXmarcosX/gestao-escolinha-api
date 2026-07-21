@@ -21,9 +21,8 @@ export class AlunoService {
   async create(createAlunoDto: CreateAlunoDto) {
     await this.failIfCpfExists(createAlunoDto.cpf)
     await this.failIfEmailExists(createAlunoDto.email)
-    await this.usuarioService.failIfCpfNotExists(createAlunoDto.responsavel.cpf)
 
-    const responsavel = await this.responsavelService.findByUserCpf(createAlunoDto.responsavel.cpf)
+    const responsavel = await this.responsavelService.findOne(createAlunoDto.responsavelId)
 
     const alunoCriado = this.alunoRepository.create({
       ...createAlunoDto,
@@ -103,6 +102,10 @@ export class AlunoService {
     const aluno = await this.alunoRepository.preload({
       id,
       ...updateAlunoDto,
+      responsavel: (
+        updateAlunoDto.responsavelId ?
+          await this.responsavelService.findOne(updateAlunoDto.responsavelId) : undefined
+      )
     })
 
     if (!aluno) throw new NotFoundException('Aluno não encontrado.')

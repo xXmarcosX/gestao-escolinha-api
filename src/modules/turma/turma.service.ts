@@ -15,7 +15,6 @@ export class TurmaService {
     @InjectRepository(Turma)
     private readonly turmaRepository: Repository<Turma>,
     private readonly instrutorService: InstrutorService,
-    private readonly usuarioService: UsuarioService,
     private readonly alunoService: AlunoService
   ) { }
 
