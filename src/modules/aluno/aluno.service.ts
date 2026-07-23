@@ -3,10 +3,10 @@ import { CreateAlunoDto } from './dto/create-aluno.dto';
 import { UpdateAlunoDto } from './dto/update-aluno.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Aluno } from './entities/aluno.entity';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { ResponsavelService } from 'src/modules/responsavel/responsavel.service';
-import { UsuarioService } from 'src/modules/usuario/usuario.service';
 import { FichaMedicaAlunoService } from '../ficha-medica-aluno/ficha-medica-aluno.service';
+import { InsertAlunoTurmaDto } from '../turma/dto/insert-aluno-turma.dto';
 
 @Injectable()
 export class AlunoService {
@@ -14,7 +14,6 @@ export class AlunoService {
     @InjectRepository(Aluno)
     private readonly alunoRepository: Repository<Aluno>,
     private readonly responsavelService: ResponsavelService,
-    private readonly usuarioService: UsuarioService,
     private readonly fichaMedicaService: FichaMedicaAlunoService
   ) { }
 
@@ -40,6 +39,33 @@ export class AlunoService {
     if (isAtivo) return this.findActiveAlunos()
 
     else return this.alunoRepository.find({
+      relations: {
+        fichaMedica: false,
+        responsavel: {
+          telefones: true,
+          usuario: true
+        }
+      },
+      select: {
+        responsavel: {
+          primeiroNome: true,
+          sobrenome: true,
+          telefones: {
+            numero: true
+          },
+          usuario: {
+            email: true
+          }
+        }
+      }
+    })
+  }
+
+  findActiveAlunos() {
+    return this.alunoRepository.find({
+      where: {
+        ativo: true
+      },
       relations: {
         fichaMedica: false,
         responsavel: {
@@ -140,33 +166,6 @@ export class AlunoService {
     return exists
   }
 
-  findActiveAlunos() {
-    return this.alunoRepository.find({
-      where: {
-        ativo: true
-      },
-      relations: {
-        fichaMedica: false,
-        responsavel: {
-          telefones: true,
-          usuario: true
-        }
-      },
-      select: {
-        responsavel: {
-          primeiroNome: true,
-          sobrenome: true,
-          telefones: {
-            numero: true
-          },
-          usuario: {
-            email: true
-          }
-        }
-      }
-    })
-  }
-
   async insertAlunoTurma(idAluno: number, idTurma: number) {
     if (!idAluno) throw new BadRequestException('id do aluno não enviado.')
 
@@ -174,6 +173,21 @@ export class AlunoService {
       id: idAluno,
       turma: {
         id: idTurma
+      }
+    })
+
+    if (!aluno) throw new NotFoundException(`Aluno com id ${idAluno} não encontrado. `)
+
+    return this.alunoRepository.save(aluno)
+  }
+
+  async removeAlunoTurma(idAluno: number) {
+    if (!idAluno) throw new BadRequestException('id do aluno não enviado.')
+
+    const aluno = await this.alunoRepository.preload({
+      id: idAluno,
+      turma: {
+        id: null as any
       }
     })
 

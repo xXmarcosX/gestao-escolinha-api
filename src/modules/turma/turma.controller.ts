@@ -45,7 +45,7 @@ export class TurmaController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Post(':id/aluno')
   insertAlunos(
-    @Param('id') idTurma: string,
+    @Param('id', ParseIntPipe) idTurma: string,
     @Body() idsAlunos: InsertAlunoTurmaDto
   ) {
     return this.turmaService.insertAlunos(idsAlunos, +idTurma)
@@ -54,8 +54,17 @@ export class TurmaController {
   @UseGuards(JwtAuthGuard, AdminGuard)
   @Get(':id/aluno')
   findAllAlunos(
-    @Param('id') idTurma: string
+    @Param('id', ParseIntPipe) idTurma: string
   ) {
     return this.alunoService.findAllByTurmaId(+idTurma)
+  }
+
+  @UseGuards(JwtAuthGuard, AdminGuard)
+  @Patch(':id/aluno')
+  removeAluno(
+    @Param('id', ParseIntPipe) idTurma: string,
+    @Body() idsAlunos: InsertAlunoTurmaDto
+  ) {
+    return this.turmaService.removeAlunos(idsAlunos, +idTurma)
   }
 }

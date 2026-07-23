@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Turma } from './entities/turma.entity';
 import { Repository } from 'typeorm';
 import { InstrutorService } from 'src/modules/instrutor/instrutor.service';
-import { UsuarioService } from 'src/modules/usuario/usuario.service';
 import { InsertAlunoTurmaDto } from './dto/insert-aluno-turma.dto';
 import { AlunoService } from '../aluno/aluno.service';
 
@@ -90,6 +89,14 @@ export class TurmaService {
   async insertAlunos(idsAlunos: InsertAlunoTurmaDto, idTurma: number) {
     for (const id of idsAlunos.idsAlunos) {
       await this.alunoService.insertAlunoTurma(id, idTurma);
+    }
+
+    return this.alunoService.findAllByTurmaId(idTurma)
+  }
+
+  async removeAlunos(idsAlunos: InsertAlunoTurmaDto, idTurma: number) {
+    for (const id of idsAlunos.idsAlunos) {
+      await this.alunoService.removeAlunoTurma(id);
     }
 
     return this.alunoService.findAllByTurmaId(idTurma)

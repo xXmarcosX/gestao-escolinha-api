@@ -43,7 +43,7 @@ export class Aluno {
   @OneToOne(() => FichaMedicaAluno, (ficha) => ficha.aluno,  { cascade: true })
   fichaMedica: FichaMedicaAluno;
 
-  @ManyToOne(() => Turma, (turma) => turma.alunos)
+  @ManyToOne(() => Turma, (turma) => turma.alunos, {nullable: true})
   @JoinColumn({name: 'turma_id'})
   turma: Turma;
 }
