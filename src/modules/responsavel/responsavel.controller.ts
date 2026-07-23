@@ -11,12 +11,14 @@ import { AdminGuard } from 'src/common/guards/admin.guard';
 import { NewTicketResponseDto } from '../ticket/dto/new-ticket-response.dto';
 import { UpdateTicketDto } from '../ticket/dto/update-ticket.dto';
 import { ResponsavelResponseDto } from './dto/responsavel-response.dto';
+import { MensalidadeService } from '../mensalidade/mensalidade.service';
 
 @Controller('responsavel')
 export class ResponsavelController {
   constructor(
     private readonly responsavelService: ResponsavelService,
-    private readonly ticketService: TicketService
+    private readonly ticketService: TicketService,
+    private readonly mensalidadeService: MensalidadeService
   ) { }
 
   @Post()
@@ -94,5 +96,13 @@ export class ResponsavelController {
     @Param('id', ParseIntPipe) id: string
   ) {
     return this.ticketService.remove(+id, +req.user.sub)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('me/mensalidade')
+  findAllMensaldiades(
+    @Req() req: AuthenticatedRequest
+  ) {
+    return this.mensalidadeService.findAllResponsavelMensalidades(+req.user.sub)
   }
 }

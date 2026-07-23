@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MensalidadeService } from './mensalidade.service';
 import { MensalidadeController } from './mensalidade.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,8 +11,9 @@ import { TipoPagamentoModule } from '../tipo-pagamento/tipo-pagamento.module';
   providers: [MensalidadeService],
   imports: [
     TypeOrmModule.forFeature([Mensalidade]),
-    ResponsavelModule,
+    forwardRef(() => ResponsavelModule),
     TipoPagamentoModule
-  ]
+  ],
+  exports: [MensalidadeService]
 })
 export class MensalidadeModule {}

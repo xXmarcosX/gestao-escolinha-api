@@ -1,20 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { MensalidadeService } from './mensalidade.service';
 import { CreateMensalidadeDto } from './dto/create-mensalidade.dto';
 import { UpdateMensalidadeDto } from './dto/update-mensalidade.dto';
+import { JwtAuthGuard } from 'src/common/guards/jwt-auth.guard';
+import { AdminGuard } from 'src/common/guards/admin.guard';
 
 @Controller('mensalidade')
 export class MensalidadeController {
   constructor(private readonly mensalidadeService: MensalidadeService) {}
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Post()
   create(@Body() createMensalidadeDto: CreateMensalidadeDto) {
     return this.mensalidadeService.create(createMensalidadeDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.mensalidadeService.findAll();
   }
 
   @Get(':id')

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ResponsavelService } from './responsavel.service';
 import { ResponsavelController } from './responsavel.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -7,6 +7,7 @@ import { UsuarioModule } from 'src/modules/usuario/usuario.module';
 import { TelefoneResponsavelModule } from './telefone-responsavel/telefone-responsavel.module';
 import { AuthModule } from '../auth/auth.module';
 import { TicketModule } from '../ticket/ticket.module';
+import { MensalidadeModule } from '../mensalidade/mensalidade.module';
 
 @Module({
   controllers: [ResponsavelController],
@@ -16,7 +17,8 @@ import { TicketModule } from '../ticket/ticket.module';
     UsuarioModule,
     TelefoneResponsavelModule,
     AuthModule,
-    TicketModule
+    TicketModule,
+    MensalidadeModule
   ],
   exports: [ResponsavelService]
 })

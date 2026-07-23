@@ -30,8 +30,14 @@ export class MensalidadeService {
     return this.mensalidadeRepository.save(mensalidade)
   }
 
-  findAll() {
-    return `This action returns all mensalidade`;
+  findAllResponsavelMensalidades(idResponsavel: number) {
+    return this.mensalidadeRepository.find({
+      where: {
+        responsavel:{
+          id: idResponsavel
+        }
+      }
+    })
   }
 
   findOne(id: number) {
