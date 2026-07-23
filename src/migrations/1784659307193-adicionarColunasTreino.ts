@@ -6,8 +6,8 @@ export class AdicionarColunasTreino1784659307193 implements MigrationInterface {
         await queryRunner.query(`
             ALTER TABLE treino 
             ADD COLUMN tre_dia_treino TEXT DEFAULT NULL,
-            ADD COLUMN tre_horario_inicio_treino DATETIME NOT NULL,
-            ADD COLUMN tre_horario_fim_treino DATETIME NOT NULL;
+            ADD COLUMN tre_horario_inicio_treino DATETIME DEFAULT NULL,
+            ADD COLUMN tre_horario_fim_treino DATETIME DEFAULT NULL;
         `);
     }
 
